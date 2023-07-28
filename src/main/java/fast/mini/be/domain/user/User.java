@@ -32,18 +32,17 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 6) // AES256 양방향 암호화하여 저장
     private String empName;
 
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false, length = 8) // 2023@@@@(id값)
+    private int empNo;
+
+    @Column(length = 5)
     private String rank;
 
     @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(nullable = false, length = 8) // 2023@@@@(id값)
-    private int empNo;
-
     @ColumnDefault("0")
     @Column(nullable = false)
     private int annualCount; // 스케줄러 사용하여 한달기준으로 +1부여?
-
 }
