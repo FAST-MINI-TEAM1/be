@@ -40,6 +40,12 @@ public class Order extends BaseTimeEntity {
     @Column(length = 50)
     private String reason;
 
+    @Column(length = 10)
+    private String category;
+
+    @Column(length = 50)
+    private String etc;
+
     @Column(nullable = false, length = 7)
     @ColumnDefault("'WAIT'")
     @Enumerated(EnumType.STRING)
