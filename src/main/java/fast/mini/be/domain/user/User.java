@@ -33,7 +33,7 @@ public class User extends BaseTimeEntity {
     private String empName;
 
     @Column(nullable = false, length = 8) // 2023@@@@(id값)
-    private int empNo;
+    private String empNo;
 
     @Column(length = 5)
     private String rank;
