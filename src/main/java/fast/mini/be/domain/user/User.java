@@ -24,7 +24,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String email;
 
     @Column(nullable = false) // 단방향(Bcrypt) 암호화하여 저장
     private String password;
