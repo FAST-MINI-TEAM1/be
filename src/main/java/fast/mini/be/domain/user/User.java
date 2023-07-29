@@ -29,7 +29,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false) // 단방향(Bcrypt) 암호화하여 저장
     private String password;
 
-    @Column(nullable = false, length = 6) // AES256 양방향 암호화하여 저장
+    @Column(nullable = false, length = 30) // AES256 양방향 암호화하여 저장
     private String empName;
 
     @Column(nullable = false, length = 8) // 2023@@@@(id값)
