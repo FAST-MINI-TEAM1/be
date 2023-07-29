@@ -20,7 +20,8 @@ import javax.persistence.*;
 @Table(name = "user_tb")
 public class User extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -45,4 +46,16 @@ public class User extends BaseTimeEntity {
     @ColumnDefault("0")
     @Column(nullable = false)
     private int annualCount; // 스케줄러 사용하여 한달기준으로 +1부여?
+
+    @Column(length = 1000)
+    private String refreshToken;//RefreshToken
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void destroyRefreshToken() {
+        this.refreshToken = null;
+    }
+
 }
