@@ -1,5 +1,6 @@
 package fast.mini.be.domain.admin;
 
+import fast.mini.be.domain.admin.AdminResponse.orderByStatusDTO;
 import fast.mini.be.domain.approveDate.ApproveDate;
 import fast.mini.be.domain.approveDate.ApproveDateRepository;
 import fast.mini.be.domain.order.Order;
@@ -7,6 +8,8 @@ import fast.mini.be.domain.order.OrderRepository;
 import fast.mini.be.domain.order.OrderStatus;
 import fast.mini.be.global.erros.exception.Exception404;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,5 +42,17 @@ public class AdminService {
                 approveDateRepository.save(approveDate);
             }
         }
+    }
+
+    public Page<orderByStatusDTO> orderListByStatus(OrderStatus orderStatus, Pageable pageable){
+        Page<Order> orderList;
+        if(orderStatus == OrderStatus.WAIT){
+            orderList= orderRepository.findAllByStatus(orderStatus, pageable);
+        }else{
+            orderList= orderRepository.findAllByStatusNot(orderStatus, pageable);
+        }
+
+        Page<orderByStatusDTO> orderDTOList = orderByStatusDTO.fromEntityList(orderList);
+        return orderDTOList;
     }
 }
