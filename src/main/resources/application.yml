@@ -1,7 +1,4 @@
-
 spring:
-  profiles:
-    include: jwt # application-jwt 에 해당하는 yml을 읽을수 있다.
   config:
     activate:
       on-profile: local
@@ -40,3 +37,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+---
+spring:
+  profiles:
+    include: jwt # application-jwt 에 해당하는 yml을 읽을수 있다.
