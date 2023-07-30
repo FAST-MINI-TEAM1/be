@@ -1,7 +1,10 @@
 package fast.mini.be.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fast.mini.be.domain.user.repository.UserRepository;
 import fast.mini.be.domain.user.service.LoginService;
+import fast.mini.be.global.jwt.filter.JwtAuthenticationProcessingFilter;
+import fast.mini.be.global.jwt.service.JwtService;
 import fast.mini.be.global.login.filter.JsonEmailPasswordAuthenticationFilter;
 import fast.mini.be.global.login.handler.LoginFailureHandler;
 import fast.mini.be.global.login.handler.LoginSuccessJWTProvideHandler;
@@ -24,6 +27,8 @@ public class SecurityConfig {
 
     private final LoginService loginService;
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http, Jwt jwt, TokenService tokenService) throws
@@ -41,6 +46,8 @@ public class SecurityConfig {
             .anyRequest().authenticated();
 
         http.addFilterAfter(jsonEmailPasswordLoginFilter(), LogoutFilter.class);
+        http.addFilterBefore(jwtAuthenticationProcessingFilter(),
+            JsonEmailPasswordAuthenticationFilter.class);
 
 //            .and()
 //            .addFilterBefore(jwtAuthenticationFilter(jwt, tokenService), UsernamePasswordAuthenticationFilter.class)
@@ -56,17 +63,16 @@ public class SecurityConfig {
 
 
     @Bean
-    public AuthenticationManager authenticationManager() {//2 - AuthenticationManager 등록
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();//DaoAuthenticationProvider 사용
-        provider.setPasswordEncoder(
-            passwordEncoder());//PasswordEncoder로는 PasswordEncoderFactories.createDelegatingPasswordEncoder() 사용
-        //provider.setUserDetailsService(loginService); //이후 작성할 코드입니다.
+    public AuthenticationManager authenticationManager() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(loginService);
         return new ProviderManager(provider);
     }
 
     @Bean
     public LoginSuccessJWTProvideHandler loginSuccessJWTProvideHandler() {
-        return new LoginSuccessJWTProvideHandler();
+        return new LoginSuccessJWTProvideHandler(jwtService, userRepository);//변경
     }
 
     @Bean
@@ -84,5 +90,15 @@ public class SecurityConfig {
         jsonEmailPasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
         return jsonEmailPasswordLoginFilter;
     }
+
+
+    @Bean
+    public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
+        JwtAuthenticationProcessingFilter jsonUsernamePasswordLoginFilter = new JwtAuthenticationProcessingFilter(
+            jwtService, userRepository);
+
+        return jsonUsernamePasswordLoginFilter;
+    }
+
 
 }
