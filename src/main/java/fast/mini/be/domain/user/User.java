@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @NoArgsConstructor
@@ -50,6 +51,8 @@ public class User extends BaseTimeEntity {
     @Column(length = 1000)
     private String refreshToken;//RefreshToken
 
+
+    // jwt 관련
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
@@ -57,5 +60,22 @@ public class User extends BaseTimeEntity {
     public void destroyRefreshToken() {
         this.refreshToken = null;
     }
+
+    // 비밀번호 암호화
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
+
+
+    // 유저 권한
+    public void addUserAuthority() {
+        this.role = Role.USER;
+    }
+
+
+    //
+
+
+
 
 }
