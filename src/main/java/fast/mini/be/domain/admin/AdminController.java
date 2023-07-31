@@ -20,6 +20,7 @@ public class AdminController {
 
     @PostMapping("/order/update")
     public ResponseEntity<?> orderUpdate(@Valid @RequestBody orderUpdateDTO orderUpdateDTO){
+        adminService.orderUpdate(orderUpdateDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
