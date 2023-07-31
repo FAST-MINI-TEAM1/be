@@ -11,11 +11,11 @@ public class UserRegisterDto {
     String email;
     String password;
     String empName;
-    String ranked;
+    String position;
 
 
     public User toEntity() {
-        return User.builder().email(email).password(password).empName(empName).ranked(ranked).build();
+        return User.builder().email(email).password(password).empName(empName).position(position).build();
     }
 
 }
