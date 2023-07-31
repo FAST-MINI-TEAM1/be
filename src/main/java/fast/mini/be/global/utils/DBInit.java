@@ -37,7 +37,7 @@ public class DBInit {
                 .password(passwordEncoder.encode("lphilcock3!"))
                 .empName(AES256.encrypt("박지훈"))
                 .empNo("20200001")
-                .rank("팀장")
+                .position("팀장")
                 .role(Role.USER)
                 .annualCount(3)
                 .build();
@@ -60,7 +60,7 @@ public class DBInit {
                 .password(passwordEncoder.encode("asmallpeice8!"))
                 .empName(AES256.encrypt("박상훈"))
                 .empNo("20200003")
-                .rank("차장")
+                .position("차장")
                 .role(Role.USER)
                 .annualCount(7)
                 .build();
@@ -72,7 +72,7 @@ public class DBInit {
                 .password(passwordEncoder.encode("oleming0!"))
                 .empName(AES256.encrypt("홍길동"))
                 .empNo("20210004")
-                .rank("과장")
+                .position("과장")
                 .role(Role.USER)
                 .annualCount(3)
                 .build();
@@ -84,7 +84,7 @@ public class DBInit {
                 .password(passwordEncoder.encode("bbedding6!"))
                 .empName(AES256.encrypt("윤서연"))
                 .empNo("20210005")
-                .rank("대리")
+                .position("대리")
                 .role(Role.USER)
                 .annualCount(2)
                 .build();
@@ -118,7 +118,7 @@ public class DBInit {
                 .password(passwordEncoder.encode("wdemaine9!"))
                 .empName(AES256.encrypt("김동현"))
                 .empNo("20210008")
-                .rank("대리")
+                .position("대리")
                 .role(Role.USER)
                 .annualCount(12)
                 .build();
@@ -141,7 +141,7 @@ public class DBInit {
                 .password(passwordEncoder.encode("hoflaherty7!"))
                 .empName(AES256.encrypt("이예준"))
                 .empNo("20210010")
-                .rank("사원")
+                .position("사원")
                 .role(Role.USER)
                 .annualCount(12)
                 .build();
