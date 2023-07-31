@@ -44,12 +44,12 @@ public class AdminService {
         }
     }
 
-    public Page<orderByStatusDTO> orderListByStatus(OrderStatus orderStatus, Pageable pageable){
+    public Page<orderByStatusDTO> orderListByStatus(String status, Pageable pageable){
         Page<Order> orderList;
-        if(orderStatus == OrderStatus.WAIT){
-            orderList= orderRepository.findAllByStatus(orderStatus, pageable);
+        if(OrderStatus.WAIT.name().equals(status.toUpperCase())){
+            orderList= orderRepository.findAllByStatus(OrderStatus.WAIT, pageable);
         }else{
-            orderList= orderRepository.findAllByStatusNot(orderStatus, pageable);
+            orderList= orderRepository.findAllByStatusNot(OrderStatus.WAIT, pageable);
         }
 
         Page<orderByStatusDTO> orderDTOList = orderByStatusDTO.fromEntityList(orderList);

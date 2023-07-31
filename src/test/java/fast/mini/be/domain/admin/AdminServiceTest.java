@@ -9,6 +9,9 @@ import fast.mini.be.global.erros.exception.Exception404;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -17,8 +20,7 @@ import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -93,5 +95,86 @@ class AdminServiceTest {
         assertThrows(Exception400.class, () -> {
             adminService.orderUpdate(new AdminRequest.orderUpdateDTO(id, status));
         });
+    }
+
+    @Test
+    public void ok_orderListByStatus_WAIT_first_page() {
+        // given
+        Pageable pageable = (Pageable) PageRequest.of(0,4);
+        String status = "wait";
+
+        // when
+        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+
+        // then
+        assertEquals(orderListByStatusDTO.getNumber(), 0, "현재 페이지는 0번째이다");
+        assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
+
+        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        assertEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+        assertEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+        assertEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+        assertEquals(content.get(3).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+
+    }
+
+    @Test
+    public void ok_orderListByStatus_WAIT_next_page() {
+        // given
+        Pageable pageable = (Pageable) PageRequest.of(1,4);
+        String status = "wait";
+
+        // when
+        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+
+        // then
+        assertEquals(orderListByStatusDTO.getNumber(), 1, "현재 페이지는 1번째이다");
+        assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
+
+        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        assertEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+        assertEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+        assertEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+        assertEquals(content.get(3).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
+    }
+
+    @Test
+    public void ok_orderListByStatus_NOT_WAIT_first_page() {
+        // given
+        Pageable pageable = (Pageable) PageRequest.of(0,4);
+        String status = "complete";
+
+        // when
+        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+
+        // then
+        assertEquals(orderListByStatusDTO.getNumber(), 0, "현재 페이지는 0번째이다");
+        assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
+
+        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        assertNotEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
+        assertNotEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
+        assertNotEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
+        assertNotEquals(content.get(3).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
+    }
+
+    @Test
+    public void ok_orderListByStatus_NOT_WAIT_next_page() {
+        // given
+        Pageable pageable = (Pageable) PageRequest.of(1,4);
+        String status = "complete";
+
+        // when
+        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+
+        // then
+        assertEquals(orderListByStatusDTO.getNumber(), 1, "현재 페이지는 1번째이다");
+        assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
+
+        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        assertNotEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
+        assertNotEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
+        assertNotEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
+        assertNotEquals(content.get(3).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
     }
 }
