@@ -38,7 +38,7 @@ public class User extends BaseTimeEntity {
     private int empNo;
 
     @Column(length = 5)
-    private String ranked;
+    private String position;
 
     @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
