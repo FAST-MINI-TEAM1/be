@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,5 +31,15 @@ public class AdminController {
 
         Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
         return new ResponseEntity<>(orderListByStatusDTO,HttpStatus.OK);
+    }
+
+    @GetMapping("/order/list/monthly/{orderType}")
+    public ResponseEntity<?> monthlyUserTotal(@PathVariable("orderType") String orderType, @RequestParam(value = "year")int year) {
+        if(!("duty".equals(orderType)) && !("annual".equals(orderType))){
+            throw new Exception400("url","잘못된 입력입니다.");
+        }
+
+        List<AdminResponse.MonthlyUserTotalDTO> monthlyUserTotal = adminService.monthlyUserTotal(new AdminRequest.MonthlyUserTotalDTO(orderType, year));
+        return new ResponseEntity<>(monthlyUserTotal,HttpStatus.OK);
     }
 }
