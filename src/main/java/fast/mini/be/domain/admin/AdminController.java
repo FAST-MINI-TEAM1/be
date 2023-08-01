@@ -22,8 +22,8 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/order/list/{status}")
-    public ResponseEntity<?> orderUpdate(@PathVariable("status") String status, Pageable pageable) {
+    @GetMapping("/order/list/{status}")
+    public ResponseEntity<?> orderListByStatus(@PathVariable("status") String status, Pageable pageable) {
         if(!("wait".equals(status)) && !("complete".equals(status))){
             throw new Exception400("url","잘못된 입력입니다.");
         }
