@@ -35,6 +35,10 @@ public class AdminRequest {
         int year;
 
         public MonthlyUserTotalDTO(String orderType, int year) {
+            if (!("duty".equals(orderType)) && !("annual".equals(orderType))) {
+                throw new Exception400("url", "잘못된 입력입니다.");
+            }
+
             this.orderType = OrderType.valueOf(orderType.toUpperCase());
             this.year = year;
         }
