@@ -100,7 +100,7 @@ class AdminServiceTest {
     @Test
     public void ok_orderListByStatus_WAIT_first_page() {
         // given
-        Pageable pageable = (Pageable) PageRequest.of(0,4);
+        Pageable pageable = (Pageable) PageRequest.of(0, 4);
         String status = "wait";
 
         // when
@@ -121,7 +121,7 @@ class AdminServiceTest {
     @Test
     public void ok_orderListByStatus_WAIT_next_page() {
         // given
-        Pageable pageable = (Pageable) PageRequest.of(1,4);
+        Pageable pageable = (Pageable) PageRequest.of(1, 4);
         String status = "wait";
 
         // when
@@ -141,7 +141,7 @@ class AdminServiceTest {
     @Test
     public void ok_orderListByStatus_NOT_WAIT_first_page() {
         // given
-        Pageable pageable = (Pageable) PageRequest.of(0,4);
+        Pageable pageable = (Pageable) PageRequest.of(0, 4);
         String status = "complete";
 
         // when
@@ -161,7 +161,7 @@ class AdminServiceTest {
     @Test
     public void ok_orderListByStatus_NOT_WAIT_next_page() {
         // given
-        Pageable pageable = (Pageable) PageRequest.of(1,4);
+        Pageable pageable = (Pageable) PageRequest.of(1, 4);
         String status = "complete";
 
         // when
@@ -179,8 +179,8 @@ class AdminServiceTest {
     }
 
     @Test
-    public void ok_monthlyUserTotal_annual(){
-    	// given
+    public void ok_monthlyUserTotal_annual() {
+        // given
         String orderType = "annual";
         int year = 2023;
         AdminRequest.MonthlyUserTotalDTO monthlyUserTotalDTO = new AdminRequest.MonthlyUserTotalDTO(orderType, year);
@@ -190,23 +190,23 @@ class AdminServiceTest {
 
         // then
         AdminResponse.MonthlyUserTotalDTO userTotalDTO = monthlyUserTotalDTOList.get(1);// id=2인 유저
-        assertEquals(userTotalDTO.getMonth().getJan(),6L,"1월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getFeb(),0L,"2월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getMar(),0L,"3월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getApr(),0L,"4월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getMay(),5L,"5월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getJun(),0L,"6월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getJul(),0L,"7월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getAug(),0L,"8월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getSept(),0L,"9월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getOct(),0L,"10월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getNov(),4L,"11월 연차 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getDec(),0L,"12월 연차 사용 내역");
-        assertEquals(userTotalDTO.getTotal(),15L,"total 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJan(), 6L, "1월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getFeb(), 0L, "2월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMar(), 0L, "3월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getApr(), 0L, "4월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMay(), 5L, "5월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJun(), 0L, "6월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJul(), 0L, "7월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getAug(), 0L, "8월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getSept(), 0L, "9월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getOct(), 0L, "10월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getNov(), 4L, "11월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getDec(), 0L, "12월 연차 사용 내역");
+        assertEquals(userTotalDTO.getTotal(), 15L, "total 연차 사용 내역");
     }
 
     @Test
-    public void ok_monthlyUserTotal_duty(){
+    public void ok_monthlyUserTotal_duty() {
         // given
         String orderType = "duty";
         int year = 2023;
@@ -217,19 +217,19 @@ class AdminServiceTest {
 
         // then
         AdminResponse.MonthlyUserTotalDTO userTotalDTO = monthlyUserTotalDTOList.get(1);// id=2인 유저
-        assertEquals(userTotalDTO.getMonth().getJan(),1L,"1월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getFeb(),0L,"2월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getMar(),0L,"3월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getApr(),0L,"4월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getMay(),0L,"5월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getJun(),0L,"6월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getJul(),0L,"7월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getAug(),1L,"8월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getSept(),0L,"9월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getOct(),0L,"10월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getNov(),0L,"11월 당직 사용 내역");
-        assertEquals(userTotalDTO.getMonth().getDec(),0L,"12월 당직 사용 내역");
-        assertEquals(userTotalDTO.getTotal(),2L,"total 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJan(), 1L, "1월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getFeb(), 0L, "2월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMar(), 0L, "3월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getApr(), 0L, "4월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMay(), 0L, "5월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJun(), 0L, "6월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJul(), 0L, "7월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getAug(), 1L, "8월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getSept(), 0L, "9월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getOct(), 0L, "10월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getNov(), 0L, "11월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getDec(), 0L, "12월 당직 사용 내역");
+        assertEquals(userTotalDTO.getTotal(), 2L, "total 당직 사용 내역");
     }
 
     @Test
