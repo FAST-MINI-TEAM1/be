@@ -1,7 +1,6 @@
 package fast.mini.be.domain.admin;
 
 import fast.mini.be.domain.order.OrderStatus;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

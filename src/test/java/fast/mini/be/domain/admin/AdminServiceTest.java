@@ -104,13 +104,13 @@ class AdminServiceTest {
         String status = "wait";
 
         // when
-        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+        Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
 
         // then
         assertEquals(orderListByStatusDTO.getNumber(), 0, "현재 페이지는 0번째이다");
         assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
 
-        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        List<AdminResponse.OrderByStatusDTO> content = orderListByStatusDTO.getContent();
         assertEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
         assertEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
         assertEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
@@ -125,13 +125,13 @@ class AdminServiceTest {
         String status = "wait";
 
         // when
-        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+        Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
 
         // then
         assertEquals(orderListByStatusDTO.getNumber(), 1, "현재 페이지는 1번째이다");
         assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
 
-        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        List<AdminResponse.OrderByStatusDTO> content = orderListByStatusDTO.getContent();
         assertEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
         assertEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
         assertEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT이며 label(한글)로 반환 한다");
@@ -145,13 +145,13 @@ class AdminServiceTest {
         String status = "complete";
 
         // when
-        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+        Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
 
         // then
         assertEquals(orderListByStatusDTO.getNumber(), 0, "현재 페이지는 0번째이다");
         assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
 
-        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        List<AdminResponse.OrderByStatusDTO> content = orderListByStatusDTO.getContent();
         assertNotEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
         assertNotEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
         assertNotEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
@@ -165,13 +165,13 @@ class AdminServiceTest {
         String status = "complete";
 
         // when
-        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+        Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
 
         // then
         assertEquals(orderListByStatusDTO.getNumber(), 1, "현재 페이지는 1번째이다");
         assertEquals(orderListByStatusDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
 
-        List<AdminResponse.orderByStatusDTO> content = orderListByStatusDTO.getContent();
+        List<AdminResponse.OrderByStatusDTO> content = orderListByStatusDTO.getContent();
         assertNotEquals(content.get(0).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
         assertNotEquals(content.get(1).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
         assertNotEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");

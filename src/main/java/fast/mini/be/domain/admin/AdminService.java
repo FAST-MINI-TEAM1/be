@@ -1,6 +1,6 @@
 package fast.mini.be.domain.admin;
 
-import fast.mini.be.domain.admin.AdminResponse.orderByStatusDTO;
+import fast.mini.be.domain.admin.AdminResponse.OrderByStatusDTO;
 import fast.mini.be.domain.approveDate.ApproveDate;
 import fast.mini.be.domain.approveDate.ApproveDateRepository;
 import fast.mini.be.domain.order.Order;
@@ -44,7 +44,7 @@ public class AdminService {
         }
     }
   
-    public Page<orderByStatusDTO> orderListByStatus(String status, Pageable pageable){
+    public Page<OrderByStatusDTO> orderListByStatus(String status, Pageable pageable){
         Page<Order> orderList;
         if(OrderStatus.WAIT.name().equals(status.toUpperCase())){
             orderList= orderRepository.findAllByStatus(OrderStatus.WAIT, pageable);
@@ -52,7 +52,7 @@ public class AdminService {
             orderList= orderRepository.findAllByStatusNot(OrderStatus.WAIT, pageable);
         }
 
-        Page<orderByStatusDTO> orderDTOList = orderByStatusDTO.fromEntityList(orderList);
+        Page<OrderByStatusDTO> orderDTOList = OrderByStatusDTO.fromEntityList(orderList);
         return orderDTOList;
     }
 }
