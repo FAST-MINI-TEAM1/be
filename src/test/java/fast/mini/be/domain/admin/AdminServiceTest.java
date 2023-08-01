@@ -177,4 +177,58 @@ class AdminServiceTest {
         assertNotEquals(content.get(2).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
         assertNotEquals(content.get(3).getStatus(), OrderStatus.WAIT.getLabel(), "요청 상태는 WAIT가 아니며 label(한글)로 반환 한다");
     }
+
+    @Test
+    public void ok_monthlyUserTotal_annual(){
+    	// given
+        String orderType = "annual";
+        int year = 2023;
+        AdminRequest.MonthlyUserTotalDTO monthlyUserTotalDTO = new AdminRequest.MonthlyUserTotalDTO(orderType, year);
+
+        // when
+        List<AdminResponse.MonthlyUserTotalDTO> monthlyUserTotalDTOList = adminService.monthlyUserTotal(monthlyUserTotalDTO);
+
+        // then
+        AdminResponse.MonthlyUserTotalDTO userTotalDTO = monthlyUserTotalDTOList.get(1);// id=2인 유저
+        assertEquals(userTotalDTO.getMonth().getJan(),6L,"1월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getFeb(),0L,"2월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMar(),0L,"3월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getApr(),0L,"4월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMay(),5L,"5월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJun(),0L,"6월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJul(),0L,"7월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getAug(),0L,"8월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getSept(),0L,"9월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getOct(),0L,"10월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getNov(),4L,"11월 연차 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getDec(),0L,"12월 연차 사용 내역");
+        assertEquals(userTotalDTO.getTotal(),15L,"total 연차 사용 내역");
+    }
+
+    @Test
+    public void ok_monthlyUserTotal_duty(){
+        // given
+        String orderType = "duty";
+        int year = 2023;
+        AdminRequest.MonthlyUserTotalDTO monthlyUserTotalDTO = new AdminRequest.MonthlyUserTotalDTO(orderType, year);
+
+        // when
+        List<AdminResponse.MonthlyUserTotalDTO> monthlyUserTotalDTOList = adminService.monthlyUserTotal(monthlyUserTotalDTO);
+
+        // then
+        AdminResponse.MonthlyUserTotalDTO userTotalDTO = monthlyUserTotalDTOList.get(1);// id=2인 유저
+        assertEquals(userTotalDTO.getMonth().getJan(),1L,"1월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getFeb(),0L,"2월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMar(),0L,"3월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getApr(),0L,"4월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getMay(),0L,"5월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJun(),0L,"6월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getJul(),0L,"7월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getAug(),1L,"8월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getSept(),0L,"9월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getOct(),0L,"10월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getNov(),0L,"11월 당직 사용 내역");
+        assertEquals(userTotalDTO.getMonth().getDec(),0L,"12월 당직 사용 내역");
+        assertEquals(userTotalDTO.getTotal(),2L,"total 당직 사용 내역");
+    }
 }
