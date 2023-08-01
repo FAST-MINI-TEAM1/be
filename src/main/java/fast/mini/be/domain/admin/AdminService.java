@@ -1,6 +1,5 @@
 package fast.mini.be.domain.admin;
 
-import fast.mini.be.domain.admin.AdminResponse.OrderByStatusDTO;
 import fast.mini.be.domain.approveDate.ApproveDate;
 import fast.mini.be.domain.approveDate.ApproveDateRepository;
 import fast.mini.be.domain.order.Order;
@@ -20,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static fast.mini.be.domain.admin.AdminRequest.orderUpdateDTO;
-
 @RequiredArgsConstructor
 @Service
 public class AdminService {
@@ -29,7 +26,7 @@ public class AdminService {
     private final ApproveDateRepository approveDateRepository;
     private final UserRepository userRepository;
 
-    public void orderUpdate(orderUpdateDTO orderUpdateDTO) {
+    public void orderUpdate(AdminRequest.orderUpdateDTO orderUpdateDTO) {
         Order orderPS = orderRepository.findById(orderUpdateDTO.getId())
                 .orElseThrow(() -> new Exception404("결재 요청을 찾을 수 없습니다."));
 
@@ -50,7 +47,7 @@ public class AdminService {
         }
     }
   
-    public Page<OrderByStatusDTO> orderListByStatus(String status, Pageable pageable){
+    public Page<AdminResponse.OrderByStatusDTO> orderListByStatus(String status, Pageable pageable){
         Page<Order> orderList;
         if(OrderStatus.WAIT.name().equals(status.toUpperCase())){
             orderList= orderRepository.findAllByStatus(OrderStatus.WAIT, pageable);
@@ -58,7 +55,7 @@ public class AdminService {
             orderList= orderRepository.findAllByStatusNot(OrderStatus.WAIT, pageable);
         }
 
-        Page<OrderByStatusDTO> orderDTOList = OrderByStatusDTO.fromEntityList(orderList);
+        Page<AdminResponse.OrderByStatusDTO> orderDTOList = AdminResponse.OrderByStatusDTO.fromEntityList(orderList);
         return orderDTOList;
     }
 

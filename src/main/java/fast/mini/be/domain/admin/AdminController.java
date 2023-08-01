@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static fast.mini.be.domain.admin.AdminRequest.*;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin")
@@ -19,7 +17,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/order/update")
-    public ResponseEntity<?> orderUpdate(@Valid @RequestBody orderUpdateDTO orderUpdateDTO){
+    public ResponseEntity<?> orderUpdate(@Valid @RequestBody AdminRequest.orderUpdateDTO orderUpdateDTO){
         adminService.orderUpdate(orderUpdateDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
