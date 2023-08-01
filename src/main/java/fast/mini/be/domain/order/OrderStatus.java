@@ -1,5 +1,6 @@
 package fast.mini.be.domain.order;
 
+import fast.mini.be.global.erros.exception.Exception400;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -21,6 +22,6 @@ public enum OrderStatus {
         return Arrays.stream(OrderStatus.values())
                 .filter(o->o.getLabel().equals(label))
                 .findAny()
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(()->new Exception400("status","정의되지 않은 입력값입니다."));
     }
 }

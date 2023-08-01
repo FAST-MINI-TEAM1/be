@@ -2,7 +2,8 @@ package fast.mini.be.global.utils;
 
 import fast.mini.be.domain.user.Role;
 import fast.mini.be.domain.user.User;
-import fast.mini.be.domain.user.UserRepository;
+
+import fast.mini.be.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +34,7 @@ public class DBInit {
 
     private void initUser() throws Exception {
         User user1 = User.builder()
-                .username("lphilcock3@latimes.com")
+                .email("lphilcock3@latimes.com")
                 .password(passwordEncoder.encode("lphilcock3!"))
                 .empName(AES256.encrypt("박지훈"))
                 .empNo("20200001")
@@ -45,7 +46,7 @@ public class DBInit {
         userRepository.save(user1);
 
         User user2 = User.builder()
-                .username("ebunce1@bravesites.com")
+                .email("ebunce1@bravesites.com")
                 .password(passwordEncoder.encode("ebunce1!"))
                 .empName(AES256.encrypt("김철수"))
                 .empNo("20200002")
@@ -56,7 +57,7 @@ public class DBInit {
         userRepository.save(user2);
 
         User user3 = User.builder()
-                .username("asmallpeice8@myspace.com")
+                .email("asmallpeice8@myspace.com")
                 .password(passwordEncoder.encode("asmallpeice8!"))
                 .empName(AES256.encrypt("박상훈"))
                 .empNo("20200003")
@@ -68,7 +69,7 @@ public class DBInit {
         userRepository.save(user3);
 
         User user4 = User.builder()
-                .username("oleming0@typepad.com")
+                .email("oleming0@typepad.com")
                 .password(passwordEncoder.encode("oleming0!"))
                 .empName(AES256.encrypt("홍길동"))
                 .empNo("20210004")
@@ -80,7 +81,7 @@ public class DBInit {
         userRepository.save(user4);
 
         User user5 = User.builder()
-                .username("bbedding6@themeforest.net")
+                .email("bbedding6@themeforest.net")
                 .password(passwordEncoder.encode("bbedding6!"))
                 .empName(AES256.encrypt("윤서연"))
                 .empNo("20210005")
@@ -92,7 +93,7 @@ public class DBInit {
         userRepository.save(user5);
 
         User user6 = User.builder()
-                .username("oshipcott4@usgs.gov")
+                .email("oshipcott4@usgs.gov")
                 .password(passwordEncoder.encode("oshipcott4!"))
                 .empName(AES256.encrypt("이지영"))
                 .empNo("20210006")
@@ -103,7 +104,7 @@ public class DBInit {
         userRepository.save(user6);
 
         User user7 = User.builder()
-                .username("taron2@wufoo.com")
+                .email("taron2@wufoo.com")
                 .password(passwordEncoder.encode("taron2!"))
                 .empName(AES256.encrypt("김영희"))
                 .empNo("20210007")
@@ -114,7 +115,7 @@ public class DBInit {
         userRepository.save(user7);
 
         User user8 = User.builder()
-                .username("wdemaine9@example.com")
+                .email("wdemaine9@example.com")
                 .password(passwordEncoder.encode("wdemaine9!"))
                 .empName(AES256.encrypt("김동현"))
                 .empNo("20210008")
@@ -126,7 +127,7 @@ public class DBInit {
         userRepository.save(user8);
 
         User user9 = User.builder()
-                .username("mkellet5@canalblog.com")
+                .email("mkellet5@canalblog.com")
                 .password(passwordEncoder.encode("mkellet5!"))
                 .empName(AES256.encrypt("최민준"))
                 .empNo("20210009")
@@ -137,7 +138,7 @@ public class DBInit {
         userRepository.save(user9);
 
         User user10 = User.builder()
-                .username("hoflaherty7@cbslocal.com")
+                .email("hoflaherty7@cbslocal.com")
                 .password(passwordEncoder.encode("hoflaherty7!"))
                 .empName(AES256.encrypt("이예준"))
                 .empNo("20210010")
