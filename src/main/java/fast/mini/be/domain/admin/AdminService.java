@@ -80,4 +80,14 @@ public class AdminService {
 
         return monthlyUserTotalDTOList;
     }
+
+    public List<AdminResponse.DailyOrderDTO> dailyOrderList(AdminRequest.DailyOrderListDTO dailyOrderListDTO){
+        List<ApproveDate> approveDateList = approveDateRepository
+                .findAllByOrderTypeInYearMonth(
+                        dailyOrderListDTO.getOrderType(), dailyOrderListDTO.getYear(), dailyOrderListDTO.getMonth()
+                )
+                .orElseThrow(() -> new Exception404("해당 데이터가 존재하지 않습니다."));
+
+        return AdminResponse.DailyOrderDTO.fromEntityList(approveDateList);
+    }
 }
