@@ -38,4 +38,23 @@ public class AdminRequest {
             this.year = year;
         }
     }
+
+    @Getter
+    @Setter
+    public static class DailyOrderListDTO {
+        @NotEmpty
+        OrderType orderType;
+
+        @NotEmpty
+        int year;
+
+        @NotEmpty
+        int month;
+
+        public DailyOrderListDTO(String orderType, int year, int month) {
+            this.orderType = OrderType.valueOf(orderType.toUpperCase());
+            this.year = year;
+            this.month = month;
+        }
+    }
 }
