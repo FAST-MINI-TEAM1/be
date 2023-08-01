@@ -26,7 +26,7 @@ public class AdminService {
     private final ApproveDateRepository approveDateRepository;
     private final UserRepository userRepository;
 
-    public void orderUpdate(AdminRequest.orderUpdateDTO orderUpdateDTO) {
+    public void orderUpdate(AdminRequest.OrderUpdateDTO orderUpdateDTO) {
         Order orderPS = orderRepository.findById(orderUpdateDTO.getId())
                 .orElseThrow(() -> new Exception404("결재 요청을 찾을 수 없습니다."));
 

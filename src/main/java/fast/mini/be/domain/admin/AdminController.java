@@ -17,7 +17,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/order/update")
-    public ResponseEntity<?> orderUpdate(@Valid @RequestBody AdminRequest.orderUpdateDTO orderUpdateDTO){
+    public ResponseEntity<?> orderUpdate(@Valid @RequestBody AdminRequest.OrderUpdateDTO orderUpdateDTO){
         adminService.orderUpdate(orderUpdateDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }

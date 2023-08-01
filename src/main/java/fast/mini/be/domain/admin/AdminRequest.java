@@ -11,13 +11,13 @@ public class AdminRequest {
 
     @Getter
     @Setter
-    public static class orderUpdateDTO{
+    public static class OrderUpdateDTO {
         @NotEmpty
         Long id;
         @NotEmpty
         OrderStatus status;
 
-        public orderUpdateDTO(Long id, String status) {
+        public OrderUpdateDTO(Long id, String status) {
             this.id = id;
             this.status = OrderStatus.findByLabel(status);
         }

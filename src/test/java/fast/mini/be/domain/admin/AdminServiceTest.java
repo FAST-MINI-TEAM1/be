@@ -39,7 +39,7 @@ class AdminServiceTest {
         String status = "반려";
 
         // when
-        adminService.orderUpdate(new AdminRequest.orderUpdateDTO(id, status));
+        adminService.orderUpdate(new AdminRequest.OrderUpdateDTO(id, status));
 
         // then
         Order order = orderRepository.findById(id).get();
@@ -53,7 +53,7 @@ class AdminServiceTest {
         String status = "승인";
 
         // when
-        adminService.orderUpdate(new AdminRequest.orderUpdateDTO(id, status));
+        adminService.orderUpdate(new AdminRequest.OrderUpdateDTO(id, status));
 
         // then
         Order order = orderRepository.findById(id).get();
@@ -80,7 +80,7 @@ class AdminServiceTest {
         // when
         // then
         assertThrows(Exception404.class, () -> {
-            adminService.orderUpdate(new AdminRequest.orderUpdateDTO(id, status));
+            adminService.orderUpdate(new AdminRequest.OrderUpdateDTO(id, status));
         });
     }
 
@@ -93,7 +93,7 @@ class AdminServiceTest {
         // when
         // then
         assertThrows(Exception400.class, () -> {
-            adminService.orderUpdate(new AdminRequest.orderUpdateDTO(id, status));
+            adminService.orderUpdate(new AdminRequest.OrderUpdateDTO(id, status));
         });
     }
 
