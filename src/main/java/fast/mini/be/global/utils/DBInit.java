@@ -2,7 +2,6 @@ package fast.mini.be.global.utils;
 
 import fast.mini.be.domain.user.Role;
 import fast.mini.be.domain.user.User;
-
 import fast.mini.be.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

@@ -2,6 +2,7 @@ package fast.mini.be.domain.order;
 
 
 import fast.mini.be.global.jwt.service.JwtService;
+import fast.mini.be.global.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +38,8 @@ public class OrderService {
 			.map(order -> new OrderResponse(
 				order.getId(),
 				order.getOrderType().getLabel(),
-				order.getStartDate(),
-				order.getEndDate(),
+				DateUtils.toStringFormat(order.getStartDate()),
+				DateUtils.toStringFormat(order.getEndDate()),
 				order.getStatus().getLabel()))
 			.collect(Collectors.toList());
 
