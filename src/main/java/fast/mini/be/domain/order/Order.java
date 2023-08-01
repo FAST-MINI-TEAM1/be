@@ -11,6 +11,9 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -50,4 +53,18 @@ public class Order extends BaseTimeEntity {
     @ColumnDefault("'WAIT'")
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    public void statusUpdate(OrderStatus status){
+        this.status=status;
+    }
+    public List<LocalDateTime> getDateList(){
+        List<LocalDateTime> dateList = new ArrayList<>();
+
+        long numOfDays = ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate());
+        for (int i = 0; i <= numOfDays; i++) {
+            dateList.add(startDate.plusDays(i));
+        }
+
+        return dateList;
+    }
 }
