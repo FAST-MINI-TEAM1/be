@@ -55,8 +55,7 @@ public class AdminService {
             orderList= orderRepository.findAllByStatusNot(OrderStatus.WAIT, pageable);
         }
 
-        Page<AdminResponse.OrderByStatusDTO> orderDTOList = AdminResponse.OrderByStatusDTO.fromEntityList(orderList);
-        return orderDTOList;
+        return AdminResponse.OrderByStatusDTO.fromEntityList(orderList);
     }
 
     public List<AdminResponse.MonthlyUserTotalDTO> monthlyUserTotal(AdminRequest.MonthlyUserTotalDTO monthlyUserTotalDTO){
@@ -70,8 +69,9 @@ public class AdminService {
             AdminResponse.MonthCountDTO monthCountDTO = new AdminResponse.MonthCountDTO();
 
             // 해당 사원이 승인된 요청을 가지는지 찾고 월별 카운트를 갱신한다
-            Optional<List<ApproveDate>> approveDateList = approveDateRepository.findApproveDatesForUserByOrderTypeInYear(
-                            user.getId(), monthlyUserTotalDTO.getOrderType(), monthlyUserTotalDTO.getYear());
+            Optional<List<ApproveDate>> approveDateList = approveDateRepository.findAllByUserAndOrderTypeInYear(
+                            user.getId(), monthlyUserTotalDTO.getOrderType(), monthlyUserTotalDTO.getYear()
+            );
             approveDateList.ifPresent(monthCountDTO::count);
 
             // 해당 사원의 사용 대장을 추가한다
