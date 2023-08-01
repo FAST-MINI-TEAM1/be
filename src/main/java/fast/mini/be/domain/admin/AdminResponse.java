@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 public class AdminResponse {
     @Getter
     @Setter
-    public static class orderByStatusDTO {
+    public static class OrderByStatusDTO {
         Long id;
         String empName;
         String createdAt;
@@ -21,7 +21,7 @@ public class AdminResponse {
         String category;
         String etc;
 
-        private orderByStatusDTO(Order order) {
+        private OrderByStatusDTO(Order order) {
             this.id = order.getId();
             this.empName = order.getUser().getEmpName();
             this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
@@ -34,8 +34,8 @@ public class AdminResponse {
             this.etc = order.getEtc();
         }
 
-        public static Page<orderByStatusDTO> fromEntityList(Page<Order> orderList) {
-            return orderList.map(orderByStatusDTO::new);
+        public static Page<OrderByStatusDTO> fromEntityList(Page<Order> orderList) {
+            return orderList.map(OrderByStatusDTO::new);
         }
     }
 }

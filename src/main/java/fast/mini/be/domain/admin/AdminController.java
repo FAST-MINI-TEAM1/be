@@ -30,7 +30,7 @@ public class AdminController {
             throw new Exception400("url","잘못된 입력입니다.");
         }
 
-        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+        Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
         return new ResponseEntity<>(orderListByStatusDTO,HttpStatus.OK);
     }
 }
