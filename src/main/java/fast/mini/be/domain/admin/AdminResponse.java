@@ -7,9 +7,6 @@ import fast.mini.be.global.erros.exception.Exception500;
 import fast.mini.be.global.utils.AES256;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 import java.time.Month;
@@ -19,7 +16,6 @@ public class AdminResponse {
     private static final AES256 AES256 = new AES256();
 
     @Getter
-    @Setter
     public static class OrderByStatusDTO {
         Long id;
         String empName;
@@ -55,7 +51,6 @@ public class AdminResponse {
     }
 
     @Getter
-    @Setter
     public static class MonthCountDTO{
         Long jan;
         Long feb;
@@ -112,7 +107,6 @@ public class AdminResponse {
     }
 
     @Getter
-    @Setter
     public static class MonthlyUserTotalDTO {
         Long id;
         String empName;
