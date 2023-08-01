@@ -231,4 +231,22 @@ class AdminServiceTest {
         assertEquals(userTotalDTO.getMonth().getDec(),0L,"12월 당직 사용 내역");
         assertEquals(userTotalDTO.getTotal(),2L,"total 당직 사용 내역");
     }
+
+    @Test
+    public void ok_dailyOrderList_duty() {
+        // given
+        String orderType = "duty";
+        int year = 2023;
+        int month = 8;
+        AdminRequest.DailyOrderListDTO dailyOrderListDTO = new AdminRequest.DailyOrderListDTO(orderType, year, month);
+
+        // when
+        List<AdminResponse.DailyOrderDTO> dailyOrderDTOList = adminService.dailyOrderList(dailyOrderListDTO);
+
+        // then
+        assertEquals(dailyOrderDTOList.size(), 2, "년월이 일치하는 당직 승인 개수");
+        dailyOrderDTOList.forEach(
+                o -> assertTrue(o.getDate().matches("^2023-08-(0[1-9]|[1-2][0-9]|3[0-1])$"))
+        );
+    }
 }
