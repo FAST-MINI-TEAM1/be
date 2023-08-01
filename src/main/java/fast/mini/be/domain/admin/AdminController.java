@@ -1,12 +1,12 @@
 package fast.mini.be.domain.admin;
 
+import fast.mini.be.global.erros.exception.Exception400;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,5 +22,15 @@ public class AdminController {
     public ResponseEntity<?> orderUpdate(@Valid @RequestBody orderUpdateDTO orderUpdateDTO){
         adminService.orderUpdate(orderUpdateDTO);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/order/list/{status}")
+    public ResponseEntity<?> orderUpdate(@PathVariable("status") String status, Pageable pageable) {
+        if(!("wait".equals(status)) && !("complete".equals(status))){
+            throw new Exception400("url","잘못된 입력입니다.");
+        }
+
+        Page<AdminResponse.orderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
+        return new ResponseEntity<>(orderListByStatusDTO,HttpStatus.OK);
     }
 }
