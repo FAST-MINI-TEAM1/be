@@ -14,6 +14,7 @@ public class AdminRequest {
     public static class OrderUpdateDTO {
         @NotEmpty
         Long id;
+
         @NotEmpty
         OrderStatus status;
 
@@ -28,6 +29,7 @@ public class AdminRequest {
     public static class MonthlyUserTotalDTO{
         @NotEmpty
         OrderType orderType;
+
         @NotEmpty
         int year;
 

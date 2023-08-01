@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface ApproveDateRepository extends JpaRepository<ApproveDate, Long> {
     @Query("SELECT a FROM ApproveDate a " +
-            "WHERE a.user.id = :userId AND a.order.orderType = :orderType AND FUNCTION('YEAR', a.date) = :year")
+            "WHERE a.user.id = :userId AND a.order.orderType = :orderType AND YEAR(a.date) = :year")
     Optional<List<ApproveDate>> findAllByUserAndOrderTypeInYear(Long userId, OrderType orderType, int year);
 }
