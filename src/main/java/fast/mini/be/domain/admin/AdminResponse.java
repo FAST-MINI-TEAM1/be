@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.Month;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdminResponse {
     private static final AES256 AES256 = new AES256();
@@ -124,6 +125,29 @@ public class AdminResponse {
             this.empNo = user.getEmpNo();
             this.month =monthCountDTO;
             this.total = monthCountDTO.getTotalCount();
+        }
+    }
+
+    @Getter
+    public static class DailyOrderDTO {
+        String empName;
+        String empNo;
+        String orderType;
+        String date;
+
+        private DailyOrderDTO(ApproveDate approveDate) {
+            try {
+                this.empName = AES256.decrypt(approveDate.getUser().getEmpName());
+            } catch (Exception e) {
+                throw new Exception500("서버 오류!");
+            }
+            this.empNo = approveDate.getUser().getEmpNo();
+            this.orderType = approveDate.getOrder().getOrderType().getLabel();
+            this.date = DateUtils.toStringFormat(approveDate.getDate());
+        }
+
+        public static List<DailyOrderDTO> fromEntityList(List<ApproveDate> approveDateList) {
+            return approveDateList.stream().map(DailyOrderDTO::new).collect(Collectors.toList());
         }
     }
 }
