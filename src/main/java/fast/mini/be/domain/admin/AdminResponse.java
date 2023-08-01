@@ -3,15 +3,21 @@ package fast.mini.be.domain.admin;
 import fast.mini.be.domain.approveDate.ApproveDate;
 import fast.mini.be.domain.order.Order;
 import fast.mini.be.domain.user.User;
+import fast.mini.be.global.erros.exception.Exception500;
+import fast.mini.be.global.utils.AES256;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 import java.time.Month;
 import java.util.List;
 
 public class AdminResponse {
+    private static final AES256 AES256 = new AES256();
+
     @Getter
     @Setter
     public static class OrderByStatusDTO {
@@ -28,7 +34,11 @@ public class AdminResponse {
 
         private OrderByStatusDTO(Order order) {
             this.id = order.getId();
-            this.empName = order.getUser().getEmpName();
+            try {
+                this.empName = AES256.decrypt(order.getUser().getEmpName());
+            } catch (Exception e) {
+                throw new Exception500("서버 오류!");
+            }
             this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
             this.orderType = order.getOrderType().getLabel();
             this.status = order.getStatus().getLabel();
@@ -112,7 +122,11 @@ public class AdminResponse {
 
         public MonthlyUserTotalDTO(User user,MonthCountDTO monthCountDTO) {
             this.id = user.getId();
-            this.empName = user.getEmpName();
+            try {
+                this.empName = AES256.decrypt(user.getEmpName());
+            } catch (Exception e) {
+                throw new Exception500("서버 오류!");
+            }
             this.empNo = user.getEmpNo();
             this.month =monthCountDTO;
             this.total = monthCountDTO.getTotalCount();
