@@ -1,6 +1,7 @@
 package fast.mini.be.domain.admin;
 
 import fast.mini.be.domain.order.OrderStatus;
+import fast.mini.be.domain.order.OrderType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,20 @@ public class AdminRequest {
         public orderUpdateDTO(Long id, String status) {
             this.id = id;
             this.status = OrderStatus.findByLabel(status);
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class MonthlyUserTotalDTO{
+        @NotEmpty
+        OrderType orderType;
+        @NotEmpty
+        int year;
+
+        public MonthlyUserTotalDTO(String orderType, int year) {
+            this.orderType = OrderType.valueOf(orderType.toUpperCase());
+            this.year = year;
         }
     }
 }

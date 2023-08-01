@@ -1,9 +1,11 @@
 package fast.mini.be.domain.user.repository;
 
+import fast.mini.be.domain.user.Role;
 import fast.mini.be.domain.user.User;
-import java.util.Optional;
-import javax.swing.text.html.Option;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -13,5 +15,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByRefreshToken(String refreshToken);
 
-
+    Optional<List<User>> findAllByRole(Role role);
 }
