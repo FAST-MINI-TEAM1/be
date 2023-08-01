@@ -2,6 +2,10 @@ package fast.mini.be.domain.approveDate;
 
 import fast.mini.be.domain.order.Order;
 import fast.mini.be.domain.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
