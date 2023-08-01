@@ -42,4 +42,15 @@ public class AdminController {
         List<AdminResponse.MonthlyUserTotalDTO> monthlyUserTotal = adminService.monthlyUserTotal(new AdminRequest.MonthlyUserTotalDTO(orderType, year));
         return new ResponseEntity<>(monthlyUserTotal,HttpStatus.OK);
     }
+
+    @GetMapping("/order/list/{orderType}")
+    public ResponseEntity<?> dailyOrderList(
+            @PathVariable("orderType") String orderType,
+            @RequestParam(value = "year") int year,
+            @RequestParam(value = "month") int month
+    ) {
+        AdminRequest.DailyOrderListDTO requestDTO = new AdminRequest.DailyOrderListDTO(orderType, year, month);
+        List<AdminResponse.DailyOrderDTO> dailyOrderDTOList = adminService.dailyOrderList(requestDTO);
+        return new ResponseEntity<>(dailyOrderDTOList, HttpStatus.OK);
+    }
 }
