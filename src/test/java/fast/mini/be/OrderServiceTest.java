@@ -4,17 +4,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import fast.mini.be.domain.order.Order;
+import fast.mini.be.domain.order.OrderRepository;
+import fast.mini.be.domain.order.OrderRequest;
 import fast.mini.be.domain.order.OrderResponse;
 import fast.mini.be.domain.order.OrderService;
+import fast.mini.be.domain.order.OrderType;
 import fast.mini.be.global.jwt.service.JwtService;
 import java.util.*;
 import javax.transaction.Transactional;
 
 
-@Transactional
+
 @SpringBootTest
 public class OrderServiceTest {
-
 
 	@Autowired
 	private OrderService orderService;
@@ -22,6 +26,10 @@ public class OrderServiceTest {
 	@Autowired
 	private JwtService jwtService;
 
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Transactional
 	@Test
 	public void testGetUserMainPage() {
 		// 이미 존재하는 더미 데이터 조회
@@ -39,6 +47,43 @@ public class OrderServiceTest {
 		// 테스트 결과 확인
 		assertEquals(1, orderResponses.size(),"등록된 객체 수가 예상과 다릅니다.");
 		OrderResponse orderResponse = orderResponses.get(0);
+
+	}
+
+
+	@Test
+	public void testAddOrder() {
+		// 이미 존재하는 더미 데이터 조회
+		OrderType orderType = OrderType.ANNUAL;
+		String startAt = "2023-07-14";
+		String endAt = "2023-07-18";
+		String reason ="이유";
+		String category="경조사";
+		String etc="기타";
+
+
+		// 테스트에 사용할 더미 토큰 생성
+		String userEmail = "h00j@naver.com";
+		String token = jwtService.createAccessToken(userEmail);
+
+		// OrderRequest 객체 생성
+		OrderRequest orderRequest = new OrderRequest();
+		orderRequest.setOrderType(orderType);
+		orderRequest.setStartAt(startAt);
+		orderRequest.setEndAt(endAt);
+		orderRequest.setReason(reason);
+		orderRequest.setCategory(category);
+		orderRequest.setEtc(etc);
+
+
+		// 테스트 메서드 실행
+		orderService.addOrder(token, orderRequest);
+
+		// 주문이 정상적으로 추가되었는지 확인
+		List<Order> orders = orderRepository.findByUserEmail(userEmail);
+		//기존에 있던 데이터가 5개라 6으로 지정함
+		assertEquals(6, orders.size(), "연차가 정상적으로 추가되지 않았습니다.");
+		Order order = orders.get(0);
 
 	}
 }
