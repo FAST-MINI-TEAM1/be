@@ -12,7 +12,7 @@ import lombok.Setter;
 public class OrderResponse {
 	private Long id;
 	private String orderType;
-	private LocalDateTime startDate;
-	private LocalDateTime endDate;
+	private String startDate;
+	private String endDate;
 	private String status;
 }
