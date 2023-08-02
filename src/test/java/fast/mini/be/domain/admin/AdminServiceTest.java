@@ -299,4 +299,37 @@ class AdminServiceTest {
             adminService.userSearch(requestDTO);
         });
     }
+
+    @Test
+    public void ok_orderListByUserId() {
+        // given
+        Long userId = 1L;
+        Pageable pageable = (Pageable) PageRequest.of(0, 4);
+
+        // when
+        Page<AdminResponse.OrderByUserIdDTO> orderListByUserIdDTO = adminService.orderListByUserId(userId, pageable);
+
+        // then
+        assertEquals(orderListByUserIdDTO.getNumber(), 0, "현재 페이지는 0번째이다");
+        assertEquals(orderListByUserIdDTO.getNumberOfElements(), 4, "한 페이지에 데이터는 4개이다.");
+
+        List<AdminResponse.OrderByUserIdDTO> content = orderListByUserIdDTO.getContent();
+        assertEquals(content.get(0).getEmpName(), "박지훈", "박지훈의 신청 내역");
+        assertEquals(content.get(1).getEmpName(), "박지훈", "박지훈의 신청 내역");
+        assertEquals(content.get(2).getEmpName(), "박지훈", "박지훈의 신청 내역");
+        assertEquals(content.get(3).getEmpName(), "박지훈", "박지훈의 신청 내역");
+    }
+
+    @Test
+    public void fail_orderListByUserId() {
+        // given
+        Long userId = 1000L; // 없는 유저
+        Pageable pageable = (Pageable) PageRequest.of(0, 4);
+
+        // when
+        // then
+        assertThrows(Exception404.class, () -> {
+            adminService.orderListByUserId(userId, pageable);
+        });
+    }
 }
