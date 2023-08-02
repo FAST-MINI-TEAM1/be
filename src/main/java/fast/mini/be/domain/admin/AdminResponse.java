@@ -111,7 +111,7 @@ public class AdminResponse {
     public static class MonthlyUserTotalDTO {
         Long id;
         String empName;
-        String empNo;
+        Long empNo;
         MonthCountDTO month;
         Long total;
 
@@ -122,7 +122,7 @@ public class AdminResponse {
             } catch (Exception e) {
                 throw new Exception500("서버 오류!");
             }
-            this.empNo = user.getEmpNo();
+            this.empNo = Long.valueOf(user.getEmpNo());
             this.month = monthCountDTO;
             this.total = monthCountDTO.getTotalCount();
         }
@@ -131,7 +131,7 @@ public class AdminResponse {
     @Getter
     public static class DailyOrderDTO {
         String empName;
-        String empNo;
+        Long empNo;
         String orderType;
         String date;
 
@@ -141,7 +141,7 @@ public class AdminResponse {
             } catch (Exception e) {
                 throw new Exception500("서버 오류!");
             }
-            this.empNo = approveDate.getUser().getEmpNo();
+            this.empNo = Long.valueOf(approveDate.getUser().getEmpNo());
             this.orderType = approveDate.getOrder().getOrderType().getLabel();
             this.date = DateUtils.toStringFormat(approveDate.getDate());
         }
@@ -154,13 +154,13 @@ public class AdminResponse {
     @Getter
     public static class UserSearchDTO {
         Long id;
-        String empNo;
+        Long empNo;
         String empName;
         String createdAt;
 
         public UserSearchDTO(User user) {
             this.id = user.getId();
-            this.empNo = user.getEmpNo();
+            this.empNo = Long.valueOf(user.getEmpNo());
             try {
                 this.empName = AES256.decrypt(user.getEmpName());
             } catch (Exception e) {
