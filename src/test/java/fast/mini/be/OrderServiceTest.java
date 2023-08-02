@@ -10,6 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import fast.mini.be.domain.order.Order;
 import fast.mini.be.domain.order.OrderRepository;
 import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
+
+import fast.mini.be.domain.order.Order;
+import fast.mini.be.domain.order.OrderRepository;
 import fast.mini.be.domain.order.OrderRequest;
 import fast.mini.be.domain.order.OrderResponse;
 import fast.mini.be.domain.order.OrderService;
@@ -89,7 +92,7 @@ public class OrderServiceTest {
 		Order order = orders.get(0);
 
 	}
-	
+
 	@Test
 	public void orderList(){
 		// 테스트 데이터 생성
