@@ -44,7 +44,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ColumnDefault("0")
+    @ColumnDefault("12")
     @Column(nullable = false)
     private int annualCount; // 스케줄러 사용하여 한달기준으로 +1부여?
 
@@ -72,6 +72,9 @@ public class User extends BaseTimeEntity {
         this.role = Role.USER;
     }
 
+    public void setAnnualCount(Integer annualCount){
+        this.annualCount=annualCount;
+    }
 
     //
 
