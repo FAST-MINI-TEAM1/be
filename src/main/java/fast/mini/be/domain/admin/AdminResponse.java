@@ -161,7 +161,11 @@ public class AdminResponse {
         public UserSearchDTO(User user) {
             this.id = user.getId();
             this.empNo = user.getEmpNo();
-            this.empName = user.getEmpName();
+            try {
+                this.empName = AES256.decrypt(user.getEmpName());
+            } catch (Exception e) {
+                throw new Exception500("서버 오류!");
+            }
             this.createdAt = DateUtils.toStringFormat(user.getCreatedAt());
         }
     }
