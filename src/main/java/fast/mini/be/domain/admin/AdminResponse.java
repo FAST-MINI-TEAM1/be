@@ -52,7 +52,7 @@ public class AdminResponse {
     }
 
     @Getter
-    public static class MonthCountDTO{
+    public static class MonthCountDTO {
         Long jan;
         Long feb;
         Long mar;
@@ -115,7 +115,7 @@ public class AdminResponse {
         MonthCountDTO month;
         Long total;
 
-        public MonthlyUserTotalDTO(User user,MonthCountDTO monthCountDTO) {
+        public MonthlyUserTotalDTO(User user, MonthCountDTO monthCountDTO) {
             this.id = user.getId();
             try {
                 this.empName = AES256.decrypt(user.getEmpName());
@@ -123,7 +123,7 @@ public class AdminResponse {
                 throw new Exception500("서버 오류!");
             }
             this.empNo = user.getEmpNo();
-            this.month =monthCountDTO;
+            this.month = monthCountDTO;
             this.total = monthCountDTO.getTotalCount();
         }
     }
@@ -148,6 +148,21 @@ public class AdminResponse {
 
         public static List<DailyOrderDTO> fromEntityList(List<ApproveDate> approveDateList) {
             return approveDateList.stream().map(DailyOrderDTO::new).collect(Collectors.toList());
+        }
+    }
+
+    @Getter
+    public static class UserSearchDTO {
+        Long id;
+        String empNo;
+        String empName;
+        String createdAt;
+
+        public UserSearchDTO(User user) {
+            this.id = user.getId();
+            this.empNo = user.getEmpNo();
+            this.empName = user.getEmpName();
+            this.createdAt = DateUtils.toStringFormat(user.getCreatedAt());
         }
     }
 }
