@@ -3,6 +3,8 @@ package fast.mini.be.domain.order;
 import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
 import fast.mini.be.domain.user.User;
 import fast.mini.be.domain.user.repository.UserRepository;
+import fast.mini.be.global.erros.exception.Exception401;
+import fast.mini.be.global.erros.exception.Exception404;
 import fast.mini.be.global.jwt.service.JwtService;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
@@ -102,5 +104,30 @@ public class OrderService {
 		return orderListByUserDto.fromOrder(userOrderList);
 	}
 
+	public void deleteOrderByUser(String token, Long id) {
+
+		String email = jwtService.extractUsername(token)
+			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
+
+		int annualCount = user.getAnnualCount();
+
+		Order order = orderRepository.findByIdAndUserEmail(id, email)
+			.orElseThrow(() -> new Exception404("주문 내역을 찾을 수 없습니다."));
+
+		// 주문 내역이 연차인 경우에만 연차 개수를 증가
+		if (order.getOrderType() == OrderType.ANNUAL) {
+
+			annualCount++;
+
+			// 사용자의 연차 개수를 업데이트
+			user.setAnnualCount(annualCount);
+			userRepository.save(user); // 사용자 정보 업데이트
+		}
+
+		orderRepository.delete(order);
+	}
 }
 
