@@ -26,7 +26,7 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/order/list/{status}")
+    @GetMapping("/order/list/status/{status}")
     public ResponseEntity<?> orderListByStatus(
             @RequestHeader("Authorization") String token,
             @PathVariable("status") String status,
@@ -51,7 +51,7 @@ public class AdminController {
         return new ResponseEntity<>(monthlyUserTotal, HttpStatus.OK);
     }
 
-    @GetMapping("/order/list/{orderType}")
+    @GetMapping("/order/list/daily/{orderType}")
     public ResponseEntity<?> dailyOrderList(
             @RequestHeader("Authorization") String token,
             @PathVariable("orderType") String orderType,
