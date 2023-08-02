@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 public interface OrderRepository extends JpaRepository<Order,Long> {
-	  List<Order> findByUserEmail(String email);
+	List<Order> findByUserEmail(String email);
   
     Page<Order> findAllByStatus(OrderStatus status, Pageable pageable);
 
