@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import fast.mini.be.domain.order.Order;
 import fast.mini.be.domain.order.OrderRepository;
+import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
 import fast.mini.be.domain.order.OrderRequest;
 import fast.mini.be.domain.order.OrderResponse;
 import fast.mini.be.domain.order.OrderService;
@@ -84,6 +87,25 @@ public class OrderServiceTest {
 		//기존에 있던 데이터가 5개라 6으로 지정함
 		assertEquals(6, orders.size(), "연차가 정상적으로 추가되지 않았습니다.");
 		Order order = orders.get(0);
+
+	}
+	
+	@Test
+	public void orderList(){
+		// 테스트 데이터 생성
+		String userEmail = "mkellet5@canalblog.com";
+		String token = jwtService.createAccessToken(userEmail);
+
+
+		// 테스트 메서드 실행
+		Page<orderListByUserDto> orderResponsePage = orderService.getOrdersByUser(token, PageRequest.of(0, 5));
+
+		// 테스트 결과 확인
+		assertEquals(orderResponsePage.getNumber(), 0, "현재 페이지는 0번째이다");
+		assertEquals(orderResponsePage.getNumberOfElements(), 5, "한 페이지에 데이터는 5개이다.");
+
+		List<orderListByUserDto> content =orderResponsePage.getContent();
+		assertEquals(content.size(), 5, "리스트에 5개의 주문 내역이 포함되어 있다.");
 
 	}
 }
