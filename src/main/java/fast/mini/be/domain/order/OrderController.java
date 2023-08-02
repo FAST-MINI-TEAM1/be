@@ -5,6 +5,10 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,5 +56,14 @@ public class OrderController {
 		orderService.addOrder(token, orderRequest);
 
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@GetMapping("/myorder")
+	public ResponseEntity<Page<orderListByUserDto>> getOrdersByUser(@Valid @RequestHeader("Authorization") String token,
+		Pageable pageable){
+
+		Page<OrderResponse.orderListByUserDto> orderList = orderService.getOrdersByUser(token, pageable);
+
+		return ResponseEntity.ok(orderList);
 	}
 }
