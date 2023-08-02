@@ -64,4 +64,13 @@ public class AdminController {
         AdminResponse.UserSearchDTO userSearchDTO = adminService.userSearch(requestDTO);
         return new ResponseEntity<>(userSearchDTO, HttpStatus.OK);
     }
+
+    @GetMapping("/order/list")
+    public ResponseEntity<?> orderListByUserId(
+            @RequestParam(value = "user") int userId,
+            Pageable pageable
+    ) {
+        Page<AdminResponse.OrderByUserIdDTO> orderListByUserIdDTO = adminService.orderListByUserId((long) userId, pageable);
+        return new ResponseEntity<>(orderListByUserIdDTO, HttpStatus.OK);
+    }
 }
