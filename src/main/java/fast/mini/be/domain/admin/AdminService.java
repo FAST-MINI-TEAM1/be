@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -94,9 +93,10 @@ public class AdminService {
         return AdminResponse.DailyOrderDTO.fromEntityList(approveDateList);
     }
 
-    public AdminResponse.UserSearchDTO userSearch(String name, String empNo) {
-        User user = userRepository.findByEmpNameAndEmpNo(name, empNo)
+    public AdminResponse.UserSearchDTO userSearch(AdminRequest.UserSearchDTO userSearchDTO) {
+        User user = userRepository.findByEmpNameOrEmpNo(userSearchDTO.getEmpName(), userSearchDTO.getEmpNo())
                 .orElseThrow(() -> new Exception404("해당유저가 존재하지 않습니다."));
+
         return new AdminResponse.UserSearchDTO(user);
     }
 }

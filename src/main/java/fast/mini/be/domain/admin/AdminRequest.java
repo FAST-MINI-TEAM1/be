@@ -3,12 +3,15 @@ package fast.mini.be.domain.admin;
 import fast.mini.be.domain.order.OrderStatus;
 import fast.mini.be.domain.order.OrderType;
 import fast.mini.be.global.erros.exception.Exception400;
+import fast.mini.be.global.erros.exception.Exception500;
+import fast.mini.be.global.utils.AES256;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 
 public class AdminRequest {
+    private static final AES256 AES256 = new AES256();
 
     @Getter
     @Setter
@@ -64,6 +67,23 @@ public class AdminRequest {
             this.orderType = OrderType.valueOf(orderType.toUpperCase());
             this.year = year;
             this.month = month;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class UserSearchDTO {
+        String empName;
+        String empNo;
+
+        public UserSearchDTO(String empName, String empNo) {
+            try {
+                this.empName = (empName == null) ? empName : AES256.encrypt(empName);
+            } catch (Exception e) {
+                throw new Exception500("서버 오류!");
+            }
+
+            this.empNo = empNo;
         }
     }
 }
