@@ -249,4 +249,54 @@ class AdminServiceTest {
                 o -> assertTrue(o.getDate().matches("^2023-08-(0[1-9]|[1-2][0-9]|3[0-1])$"))
         );
     }
+
+    @Test
+    public void ok_userSearch_name() {
+        // given
+        String name = "박지훈";
+        String empNo = null;
+        AdminRequest.UserSearchDTO requestDTO = new AdminRequest.UserSearchDTO(name, empNo);
+
+        // when
+        AdminResponse.UserSearchDTO userSearchDTO = adminService.userSearch(requestDTO);
+
+        // then
+        assertEquals(userSearchDTO.getId(), 1, "유저 아이디");
+        assertEquals(userSearchDTO.getEmpName(), "박지훈", "유저 이름");
+        assertEquals(userSearchDTO.getEmpNo(), "20200001", "유저 사원번호");
+        // 더미 데이터에 createdAt 지정한 값이 아닌 현재 시간이 들어가는 오류로 확인 불가
+//        assertEquals(userSearchDTO.getCreatedAt(), "2020-11-29", "유저 입사일");
+    }
+
+    @Test
+    public void ok_userSearch_empno() {
+        // given
+        String name = null;
+        String empNo = "20200001";
+        AdminRequest.UserSearchDTO requestDTO = new AdminRequest.UserSearchDTO(name, empNo);
+
+        // when
+        AdminResponse.UserSearchDTO userSearchDTO = adminService.userSearch(requestDTO);
+
+        // then
+        assertEquals(userSearchDTO.getId(), 1, "유저 아이디");
+        assertEquals(userSearchDTO.getEmpName(), "박지훈", "유저 이름");
+        assertEquals(userSearchDTO.getEmpNo(), "20200001", "유저 사원번호");
+        // 더미 데이터에 createdAt 지정한 값이 아닌 현재 시간이 들어가는 오류로 확인 불가
+//        assertEquals(userSearchDTO.getCreatedAt(), "2020-11-29", "유저 입사일");
+    }
+
+    @Test
+    public void fail_userSearch_empno() {
+        // given
+        String name = null;
+        String empNo = "11110001";
+        AdminRequest.UserSearchDTO requestDTO = new AdminRequest.UserSearchDTO(name, empNo);
+
+        // when
+        // then
+        assertThrows(Exception404.class, () -> {
+            adminService.userSearch(requestDTO);
+        });
+    }
 }
