@@ -1,11 +1,14 @@
 package fast.mini.be.domain.order;
 
-
+import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
 import fast.mini.be.domain.user.User;
 import fast.mini.be.domain.user.repository.UserRepository;
 import fast.mini.be.global.jwt.service.JwtService;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,5 +90,17 @@ public class OrderService {
 
 		orderRepository.save(order);
 	}
+
+	public Page<orderListByUserDto> getOrdersByUser(String token, Pageable pageable) {
+
+		String email = jwtService.extractUsername(token).orElseThrow(() -> new RuntimeException("유효하지 않는 토큰입니다."));
+
+		// 주문 목록을 페이징
+		Page<Order> userOrderList = orderRepository.findByUserEmail(email, pageable);
+
+		// OrderListByUserDto로 변환하여 Page 객체로 반환
+		return orderListByUserDto.fromOrder(userOrderList);
+	}
+
 }
 
