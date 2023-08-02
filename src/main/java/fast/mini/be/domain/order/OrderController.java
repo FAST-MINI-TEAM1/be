@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import fast.mini.be.global.erros.exception.Exception400;
 import fast.mini.be.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 
@@ -65,5 +66,15 @@ public class OrderController {
 		Page<OrderResponse.orderListByUserDto> orderList = orderService.getOrdersByUser(token, pageable);
 
 		return ResponseEntity.ok(orderList);
+	}
+
+	@PostMapping("/order/delete/{id}")
+	public ResponseEntity<?> deleteOrderByUser(@Valid @RequestHeader("Authorization") String token, @RequestParam Long id) {
+
+		if(id == null) throw new Exception400("id","유효하지 않는 id 입니다.");
+
+		orderService.deleteOrderByUser(token, id);
+
+		return ResponseEntity.ok().build(); // 삭제 성공 시 200 OK 응답 반환
 	}
 }
