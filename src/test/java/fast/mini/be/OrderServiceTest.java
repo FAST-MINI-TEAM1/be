@@ -89,7 +89,7 @@ public class OrderServiceTest {
 		Order order = orders.get(0);
 
 	}
-	
+
 	@Test
 	public void orderList(){
 		// 테스트 데이터 생성
