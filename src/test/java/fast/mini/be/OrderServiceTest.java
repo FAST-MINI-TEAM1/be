@@ -63,7 +63,7 @@ public class OrderServiceTest {
 
 
 		// 테스트에 사용할 더미 토큰 생성
-		String userEmail = "h00j@naver.com";
+		String userEmail = "mkellet5@canalblog.com";
 		String token = jwtService.createAccessToken(userEmail);
 
 		// OrderRequest 객체 생성
