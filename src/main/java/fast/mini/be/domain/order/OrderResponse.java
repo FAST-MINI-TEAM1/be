@@ -19,6 +19,16 @@ public class OrderResponse {
 	private String endDate;
 	private String status;
 
+	public static OrderResponse fromOrder(Order order) {
+		return new OrderResponse(
+			order.getId(),
+			order.getOrderType().getLabel(),
+			DateUtils.toStringFormat(order.getStartDate()),
+			DateUtils.toStringFormat(order.getEndDate()),
+			order.getStatus().getLabel()
+		);
+	}
+
 	@Getter
 	@Setter
 	public static class orderListByUserDto {

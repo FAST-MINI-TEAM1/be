@@ -43,12 +43,7 @@ public class OrderService {
 				YearMonth orderYearMonth = YearMonth.of(startDate.getYear(), startDate.getMonth());
 				return yearMonth.equals(orderYearMonth);
 			})
-			.map(order -> new OrderResponse(
-				order.getId(),
-				order.getOrderType().getLabel(),
-				DateUtils.toStringFormat(order.getStartDate()),
-				DateUtils.toStringFormat(order.getEndDate()),
-				order.getStatus().getLabel()))
+			.map(OrderResponse::fromOrder)
 			.collect(Collectors.toList());
 
 		return orderResponses;
