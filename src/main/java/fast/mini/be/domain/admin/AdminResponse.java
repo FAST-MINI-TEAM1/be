@@ -169,4 +169,39 @@ public class AdminResponse {
             this.createdAt = DateUtils.toStringFormat(user.getCreatedAt());
         }
     }
+
+    @Getter
+    public static class OrderByUserIdDTO {
+        Long id;
+        String empName;
+        String createdAt;
+        String orderType;
+        String status;
+        String startDate;
+        String endDate;
+        String reason;
+        String category;
+        String etc;
+
+        private OrderByUserIdDTO(Order order) {
+            this.id = order.getId();
+            try {
+                this.empName = AES256.decrypt(order.getUser().getEmpName());
+            } catch (Exception e) {
+                throw new Exception500("서버 오류!");
+            }
+            this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
+            this.orderType = order.getOrderType().getLabel();
+            this.status = order.getStatus().getLabel();
+            this.startDate = DateUtils.toStringFormat(order.getStartDate());
+            this.endDate = DateUtils.toStringFormat(order.getEndDate());
+            this.reason = order.getReason();
+            this.category = order.getCategory();
+            this.etc = order.getEtc();
+        }
+
+        public static Page<OrderByUserIdDTO> fromEntityList(Page<Order> orderList) {
+            return orderList.map(OrderByUserIdDTO::new);
+        }
+    }
 }

@@ -99,4 +99,11 @@ public class AdminService {
 
         return new AdminResponse.UserSearchDTO(user);
     }
+
+    public Page<AdminResponse.OrderByUserIdDTO> orderListByUserId(long userId, Pageable pageable) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception404("해당유저가 존재하지 않습니다."));
+        Page<Order> orderList = orderRepository.findAllByUserId(user.getId(), pageable);
+
+        return AdminResponse.OrderByUserIdDTO.fromEntityList(orderList);
+    }
 }
