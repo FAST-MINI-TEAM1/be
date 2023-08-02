@@ -50,4 +50,18 @@ public class AdminController {
         List<AdminResponse.DailyOrderDTO> dailyOrderDTOList = adminService.dailyOrderList(requestDTO);
         return new ResponseEntity<>(dailyOrderDTOList, HttpStatus.OK);
     }
+
+    @GetMapping("/user/search")
+    public ResponseEntity<?> userSearch(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "empno", required = false) String empNo
+    ) {
+        if ((name != null && empNo != null) || (name == null && empNo == null)) {
+            throw new Exception400("url", "잘못된 입력입니다.");
+        }
+
+        AdminRequest.UserSearchDTO requestDTO = new AdminRequest.UserSearchDTO(name, empNo);
+        AdminResponse.UserSearchDTO userSearchDTO = adminService.userSearch(requestDTO);
+        return new ResponseEntity<>(userSearchDTO, HttpStatus.OK);
+    }
 }
