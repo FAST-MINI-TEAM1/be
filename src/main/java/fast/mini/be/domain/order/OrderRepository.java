@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface OrderRepository extends JpaRepository<Order,Long> {
 	List<Order> findByUserEmail(String email);
@@ -15,6 +17,11 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 	Optional<Order> findByIdAndUserEmail(Long id, String email);
 
 	Page<Order> findByUserEmail(String email, Pageable pageable);
+
+	// 주어진 주문 ID에 해당하는 승인 날짜들을 삭제하는 쿼리
+	@Modifying
+	@Query("DELETE FROM ApproveDate ad WHERE ad.order.id = :orderId")
+	void deleteApproveDatesByOrderId(Long orderId);
   
     Page<Order> findAllByStatus(OrderStatus status, Pageable pageable);
 

@@ -124,10 +124,14 @@ public class OrderService {
 
 			// 사용자의 연차 개수를 업데이트
 			user.setAnnualCount(annualCount);
-			userRepository.save(user); // 사용자 정보 업데이트
 		}
 
+		// 관련된 승인 날짜를 먼저 삭제
+		orderRepository.deleteApproveDatesByOrderId(id);
+
 		orderRepository.delete(order);
+
+		userRepository.save(user); // 사용자 정보 업데이트
 	}
 }
 
