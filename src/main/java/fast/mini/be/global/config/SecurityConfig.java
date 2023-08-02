@@ -33,21 +33,25 @@ public class SecurityConfig {
     @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http, Jwt jwt, TokenService tokenService) throws
     public SecurityFilterChain filterChain(HttpSecurity http) throws
-        Exception {
+            Exception {
         http
-            .formLogin().disable()//1 - formLogin 인증방법 비활성화
-            .httpBasic().disable()//2 - httpBasic 인증방법 비활성화(특정 리소스에 접근할 때 username과 password 물어봄)
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .formLogin().disable()//1 - formLogin 인증방법 비활성화
+                .httpBasic().disable()//2 - httpBasic 인증방법 비활성화(특정 리소스에 접근할 때 username과 password 물어봄)
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-            .and()
-            .authorizeRequests()
-            .antMatchers("/api/login", "/api/register").permitAll()
-            .anyRequest().authenticated();
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/login", "/api/register").permitAll()
+                .antMatchers("/api/user/**")
+                .access("hasRole('ADMIN') or hasRole('USER')")
+                .antMatchers("/api/admin/**")
+                .access("hasRole('ADMIN')")
+                .anyRequest().authenticated();
 
         http.addFilterAfter(jsonEmailPasswordLoginFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(),
-            JsonEmailPasswordAuthenticationFilter.class);
+                JsonEmailPasswordAuthenticationFilter.class);
 
 //            .and()
 //            .addFilterBefore(jwtAuthenticationFilter(jwt, tokenService), UsernamePasswordAuthenticationFilter.class)
@@ -83,10 +87,10 @@ public class SecurityConfig {
     @Bean
     public JsonEmailPasswordAuthenticationFilter jsonEmailPasswordLoginFilter() {
         JsonEmailPasswordAuthenticationFilter jsonEmailPasswordLoginFilter = new JsonEmailPasswordAuthenticationFilter(
-            objectMapper);
+                objectMapper);
         jsonEmailPasswordLoginFilter.setAuthenticationManager(authenticationManager());
         jsonEmailPasswordLoginFilter.setAuthenticationSuccessHandler(
-            loginSuccessJWTProvideHandler());
+                loginSuccessJWTProvideHandler());
         jsonEmailPasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
         return jsonEmailPasswordLoginFilter;
     }
@@ -95,7 +99,7 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
         JwtAuthenticationProcessingFilter jsonUsernamePasswordLoginFilter = new JwtAuthenticationProcessingFilter(
-            jwtService, userRepository);
+                jwtService, userRepository);
 
         return jsonUsernamePasswordLoginFilter;
     }
