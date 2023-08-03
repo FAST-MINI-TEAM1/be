@@ -1,6 +1,7 @@
 package fast.mini.be.domain.user;
 
 import fast.mini.be.domain.BaseTimeEntity;
+import java.util.Calendar;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 30) // AES256 양방향 암호화하여 저장
     private String empName;
 
-    @Column(nullable = false, length = 8) // 2023@@@@(id값)
+    @Column(nullable = true, length = 8) // 2023@@@@(id값)
     private String empNo;
 
     @Column(length = 5)
@@ -62,7 +63,7 @@ public class User extends BaseTimeEntity {
     }
 
     // 비밀번호 암호화
-    public void encodePassword(PasswordEncoder passwordEncoder){
+    public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
 
@@ -72,13 +73,19 @@ public class User extends BaseTimeEntity {
         this.role = Role.USER;
     }
 
-    public void setAnnualCount(Integer annualCount){
-        this.annualCount=annualCount;
+    public void setAnnualCount(Integer annualCount) {
+        this.annualCount = annualCount;
     }
 
-    //
-
-
+    // 사원번호 생성
+    @PostPersist
+    private void generateEmpNum() {
+        if (id != null) {
+            String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+            String generatedEmpNum = currentYear + String.format("%04d", id);
+            this.empNo = generatedEmpNum;
+        }
+    }
 
 
 }

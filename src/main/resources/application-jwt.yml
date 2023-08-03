@@ -1,0 +1,11 @@
+jwt:
+  secret: ZG9uZ2h1bi1zaGFycC1kYnJ1YS13ZWItcHJvamVjdC11c2luZy1qd3Qtc2VjcmV0LURvbmdodW4tc3ByaW5nLWJvb3Qtand0LWJhY2stZW5kLWFuZC1qcy1jb2xsYWJv
+  #base64로 인코딩된 암호 키, HS512를 사용할 것이기 때문에, 512비트(64바이트) 이상이 되어야 합니다. 길게 써주세요
+
+  access:
+    expiration: 1800 # 30분
+    header: Authorization
+
+  refresh:
+    expiration: 1209600 # 2주
+    header: Authorization-refresh
