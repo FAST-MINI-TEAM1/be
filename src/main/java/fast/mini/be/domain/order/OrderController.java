@@ -25,7 +25,7 @@ import fast.mini.be.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class OrderController {
 

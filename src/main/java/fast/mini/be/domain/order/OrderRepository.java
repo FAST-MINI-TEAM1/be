@@ -12,11 +12,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface OrderRepository extends JpaRepository<Order,Long> {
-	List<Order> findByUserEmail(String email);
+	List<Order> findByUserId(Long user_id);
 
-	Optional<Order> findByIdAndUserEmail(Long id, String email);
+	Page<Order> findByUserId(Long user_id, Pageable pageable);
 
-	Page<Order> findByUserEmail(String email, Pageable pageable);
+	Optional<Order> findById(Long id);
 
 	// 주어진 주문 ID에 해당하는 승인 날짜들을 삭제하는 쿼리
 	@Modifying
@@ -26,4 +26,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     Page<Order> findAllByStatus(OrderStatus status, Pageable pageable);
 
     Page<Order> findAllByStatusNot(OrderStatus status, Pageable pageable);
+
+	Page<Order> findAllByUserId(long userId, Pageable pageable);
+
 }

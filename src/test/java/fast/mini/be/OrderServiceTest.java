@@ -72,6 +72,7 @@ public class OrderServiceTest {
 
 
 		// 테스트에 사용할 더미 토큰 생성
+		Long user_id = 9L;
 		String userEmail = "mkellet5@canalblog.com";
 		String token = jwtService.createAccessToken(userEmail);
 
@@ -89,7 +90,7 @@ public class OrderServiceTest {
 		orderService.addOrder(token, orderRequest);
 
 		// 주문이 정상적으로 추가되었는지 확인
-		List<Order> orders = orderRepository.findByUserEmail(userEmail);
+		List<Order> orders = orderRepository.findByUserId(user_id);
 		//기존에 있던 데이터가 5개라 6으로 지정함
 		assertEquals(6, orders.size(), "연차가 정상적으로 추가되지 않았습니다.");
 		Order order = orders.get(0);
@@ -117,6 +118,8 @@ public class OrderServiceTest {
 
 	@Test
 	public void deleteOrderTest(){
+
+		Long user_id = 4L;
 		String userEmail = "oleming0@typepad.com";
 		String token = jwtService.createAccessToken(userEmail);
 
@@ -126,7 +129,7 @@ public class OrderServiceTest {
 		orderService.deleteOrderByUser(token, id);
 
 		// 주문 내역 리스트 출력해보면 해당 order 내역 사라진거 확인 가능
-		List<Order> orderList = orderRepository.findByUserEmail(userEmail);
+		List<Order> orderList = orderRepository.findByUserId(user_id);
 		for (Order order : orderList) {
 			System.out.println("주문 ID: " + order.getId());
 			System.out.println("주문 유형: " + order.getOrderType());
