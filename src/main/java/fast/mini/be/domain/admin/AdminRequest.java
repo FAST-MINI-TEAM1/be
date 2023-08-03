@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class AdminRequest {
     private static final AES256 AES256 = new AES256();
@@ -17,10 +18,9 @@ public class AdminRequest {
     @Getter
     @Setter
     public static class OrderUpdateDTO {
-        @NotEmpty
+        @NotNull
         Long id;
 
-        @NotEmpty
         String status;
 
         @JsonIgnore
