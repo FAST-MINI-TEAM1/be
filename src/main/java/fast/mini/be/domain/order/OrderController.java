@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import fast.mini.be.global.erros.exception.Exception400;
+import fast.mini.be.global.erros.exception.Exception401;
 import fast.mini.be.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 
@@ -31,16 +33,13 @@ public class OrderController {
 	private final JwtService jwtService;
 
 	@GetMapping("/main")
-	public ResponseEntity<List<OrderResponse>> getUserMainPage(@Valid @RequestHeader("Authorization") String token,  @RequestParam int year, @RequestParam int month) {
+	public ResponseEntity<List<OrderResponse>> getUserMainPage(@Valid @RequestHeader("Authorization") String token,  @RequestParam int year, @RequestParam int month) throws Exception{
 
 		String jwtToken = token.replace("Bearer ", "");
 
 		Optional<String> userEmailOpt = jwtService.extractUsername(jwtToken);
 
-		if (userEmailOpt.isEmpty()) {
-			//토큰이 유효하지 않는 경우 401 반환
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		}
+		if (userEmailOpt.isEmpty()) throw new Exception401("유효하지 않는 토큰 입니다.");
 
 		String userEmail = userEmailOpt.get();
 
@@ -51,7 +50,7 @@ public class OrderController {
 
 	@PostMapping("/order/add")
 	public ResponseEntity<String> addOrder(@Valid @RequestHeader("Authorization") String token,
-		@RequestBody OrderRequest orderRequest) {
+		@RequestBody OrderRequest orderRequest) throws Exception{
 
 		orderService.addOrder(token, orderRequest);
 
@@ -60,10 +59,20 @@ public class OrderController {
 
 	@GetMapping("/myorder")
 	public ResponseEntity<Page<orderListByUserDto>> getOrdersByUser(@Valid @RequestHeader("Authorization") String token,
-		Pageable pageable){
+		Pageable pageable)throws Exception{
 
 		Page<OrderResponse.orderListByUserDto> orderList = orderService.getOrdersByUser(token, pageable);
 
 		return ResponseEntity.ok(orderList);
+	}
+
+	@PostMapping("/order/delete/{id}")
+	public ResponseEntity<?> deleteOrderByUser(@Valid @RequestHeader("Authorization") String token, @RequestParam Long id)throws Exception {
+
+		if(id == null) throw new Exception400("id","유효하지 않는 id 입니다.");
+
+		orderService.deleteOrderByUser(token, id);
+
+		return ResponseEntity.ok().build(); // 삭제 성공 시 200 OK 응답 반환
 	}
 }

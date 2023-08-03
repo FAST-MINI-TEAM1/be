@@ -3,6 +3,9 @@ package fast.mini.be.domain.order;
 import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
 import fast.mini.be.domain.user.User;
 import fast.mini.be.domain.user.repository.UserRepository;
+import fast.mini.be.global.erros.exception.Exception401;
+import fast.mini.be.global.erros.exception.Exception403;
+import fast.mini.be.global.erros.exception.Exception404;
 import fast.mini.be.global.jwt.service.JwtService;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +32,8 @@ public class OrderService {
 
 	public List<OrderResponse> getUserMainPage(String token, int year, int month) {
 
-		String email = jwtService.extractUsername(token).orElseThrow(() -> new RuntimeException("유효하지 않는 토큰입니다."));
+		String email = jwtService.extractUsername(token)
+			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
 
 		YearMonth yearMonth = YearMonth.of(year, month);
 
@@ -41,12 +45,7 @@ public class OrderService {
 				YearMonth orderYearMonth = YearMonth.of(startDate.getYear(), startDate.getMonth());
 				return yearMonth.equals(orderYearMonth);
 			})
-			.map(order -> new OrderResponse(
-				order.getId(),
-				order.getOrderType().getLabel(),
-				DateUtils.toStringFormat(order.getStartDate()),
-				DateUtils.toStringFormat(order.getEndDate()),
-				order.getStatus().getLabel()))
+			.map(OrderResponse::fromOrder)
 			.collect(Collectors.toList());
 
 		return orderResponses;
@@ -55,15 +54,17 @@ public class OrderService {
 
 	public void addOrder(String token, OrderRequest orderRequest) {
 
-		String userEmail = jwtService.extractUsername(token).orElseThrow(() -> new RuntimeException("유효하지 않은 토큰입니다."));
+		String userEmail = jwtService.extractUsername(token)
+			.orElseThrow(() -> new Exception401("유효하지 않은 토큰입니다."));
 
-		User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+		User user = userRepository.findByEmail(userEmail)
+			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
 
 		int annualCount = user.getAnnualCount();
 
 		if (orderRequest.getOrderType() == OrderType.ANNUAL) {
 			if (annualCount <= 0) {
-				throw new RuntimeException("사용 가능한 연차가 부족합니다.");
+				throw new Exception403("사용 가능한 연차가 부족합니다.");
 			}
 			annualCount--;
 		}
@@ -93,7 +94,8 @@ public class OrderService {
 
 	public Page<orderListByUserDto> getOrdersByUser(String token, Pageable pageable) {
 
-		String email = jwtService.extractUsername(token).orElseThrow(() -> new RuntimeException("유효하지 않는 토큰입니다."));
+		String email = jwtService.extractUsername(token)
+			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
 
 		// 주문 목록을 페이징
 		Page<Order> userOrderList = orderRepository.findByUserEmail(email, pageable);
@@ -102,5 +104,34 @@ public class OrderService {
 		return orderListByUserDto.fromOrder(userOrderList);
 	}
 
+	public void deleteOrderByUser(String token, Long id) {
+
+		String email = jwtService.extractUsername(token)
+			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
+
+		int annualCount = user.getAnnualCount();
+
+		Order order = orderRepository.findByIdAndUserEmail(id, email)
+			.orElseThrow(() -> new Exception404("주문 내역을 찾을 수 없습니다."));
+
+		// 주문 내역이 연차인 경우에만 연차 개수를 증가
+		if (order.getOrderType() == OrderType.ANNUAL) {
+
+			annualCount++;
+
+			// 사용자의 연차 개수를 업데이트
+			user.setAnnualCount(annualCount);
+		}
+
+		// 관련된 승인 날짜를 먼저 삭제
+		orderRepository.deleteApproveDatesByOrderId(id);
+
+		orderRepository.delete(order);
+
+		userRepository.save(user); // 사용자 정보 업데이트
+	}
 }
 
