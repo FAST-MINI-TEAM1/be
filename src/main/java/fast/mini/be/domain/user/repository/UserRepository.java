@@ -21,4 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmpNameOrEmpNo(@RequestParam(required = false) String empName, @RequestParam(required = false) String empNo);
 
     Optional<User> findById(long userId);
+
 }
