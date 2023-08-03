@@ -1,6 +1,7 @@
 package fast.mini.be;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,9 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import fast.mini.be.domain.order.Order;
 import fast.mini.be.domain.order.OrderRepository;
 import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
-
-import fast.mini.be.domain.order.Order;
-import fast.mini.be.domain.order.OrderRepository;
 import fast.mini.be.domain.order.OrderRequest;
 import fast.mini.be.domain.order.OrderResponse;
 import fast.mini.be.domain.order.OrderService;
@@ -110,5 +108,32 @@ public class OrderServiceTest {
 		List<orderListByUserDto> content =orderResponsePage.getContent();
 		assertEquals(content.size(), 5, "리스트에 5개의 주문 내역이 포함되어 있다.");
 
+	}
+
+	@Test
+	public void deleteOrderTest(){
+		String userEmail = "mkellet5@canalblog.com";
+		String token = jwtService.createAccessToken(userEmail);
+
+		Long id =9L;
+
+		// 서비스 메서드 호출
+		orderService.deleteOrderByUser(token, id);
+
+		// 주문 내역 리스트 출력해보면 9L order 내역 사라진거 확인 가능
+		List<Order> orderList = orderRepository.findByUserEmail(userEmail);
+		for (Order order : orderList) {
+			System.out.println("주문 ID: " + order.getId());
+			System.out.println("주문 유형: " + order.getOrderType());
+			System.out.println("주문 시작일: " + order.getStartDate());
+			System.out.println("주문 종료일: " + order.getEndDate());
+			System.out.println("주문 사유: " + order.getReason());
+			System.out.println("주문 카테고리: " + order.getCategory());
+			System.out.println("기타 정보: " + order.getEtc());
+			System.out.println("주문 상태: " + order.getStatus());
+			System.out.println("주문 생성일: " + order.getCreatedAt());
+			System.out.println("주문 수정일: " + order.getUpdatedAt());
+			System.out.println("-------");
+		}
 	}
 }
