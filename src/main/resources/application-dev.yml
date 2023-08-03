@@ -1,0 +1,23 @@
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3311/miniProject
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: miniProject
+    password: miniProject1!@
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create # create or update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        format_sql: true
+#    defer-datasource-initialization: true
+
+#  sql:
+#    init:
+#      mode: always
+#      data-locations: classpath:data.sql
