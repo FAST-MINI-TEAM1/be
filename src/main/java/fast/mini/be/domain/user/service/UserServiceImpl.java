@@ -1,13 +1,22 @@
 package fast.mini.be.domain.user.service;
 
+import fast.mini.be.domain.user.Role;
 import fast.mini.be.domain.user.User;
 import fast.mini.be.domain.user.dto.UserRegisterDto;
 import fast.mini.be.domain.user.repository.UserRepository;
+import fast.mini.be.global.utils.exception.BaseException;
+import fast.mini.be.global.utils.exception.ExMessage;
+import java.util.Calendar;
+import java.util.Optional;
+import java.util.prefs.BackingStoreException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.boot.model.source.internal.hbm.XmlElementMetadata;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -17,23 +26,37 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
 
+    @Transactional
     @Override
     public void register(UserRegisterDto userRegisterDto) throws Exception {
 
-        User user = userRegisterDto.toEntity();
+        String email = userRegisterDto.getEmail();
+        String password = userRegisterDto.getPassword();
+        String empName = userRegisterDto.getEmpName();
+        String position = userRegisterDto.getPosition();
 
-        user.addUserAuthority();
-
-        user.encodePassword(passwordEncoder);
-
-        /* 예외처리 할때 진행
-        if (userRepository.findByEmail(userRegisterDto.getEmail()).isPresent()) {
-
+        if (email == null || password == null || empName == null) {
+            throw new BaseException("회원정보가 제대로 입력되지 않았습니다.");
         }
 
-         */
-        // TODO: 2023/07/30 호윤 - aes 양방향 암호화 이메일(아이디도 되는지 확인필요) 
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new BaseException(ExMessage.USER_ERROR_EMAIL_DUPLICATE);
+        } else {
+            try {
+                User user = User.builder()
+                    .email(email)
+                    .password(passwordEncoder.encode(password))
+                    .empName(empName)
+                    .position(position)
+                    .role(Role.USER)
+                    .annualCount(12)
+                    .build();
 
-        userRepository.save(user);
+                userRepository.save(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new BaseException("회원가입에 실패하였습니다.");
+            }
+        }
     }
 }
