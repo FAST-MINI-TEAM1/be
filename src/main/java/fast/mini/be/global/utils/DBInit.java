@@ -147,6 +147,17 @@ public class DBInit {
                 .build();
         user10.setCreatedAt(LocalDateTime.of(2021,10,29,10,18,32));
         userRepository.save(user10);
+
+        User admin = User.builder()
+                .email("admin@gmail.com")
+                .password(passwordEncoder.encode("admin1!"))
+                .empName(AES256.encrypt("어드민"))
+                .empNo("99999999")
+                .position("관리자")
+                .role(Role.ADMIN)
+                .annualCount(0)
+                .build();
+        userRepository.save(admin);
     }
 
     private void initOrder() {

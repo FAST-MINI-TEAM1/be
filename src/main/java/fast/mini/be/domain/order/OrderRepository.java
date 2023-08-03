@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface OrderRepository extends JpaRepository<Order,Long> {
-	List<Order> findByUserEmail(String email);
+
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    List<Order> findByUserEmail(String email);
+
+    Page<Order> findByUserEmail(String email, Pageable pageable);
 
 	Optional<Order> findByIdAndUserEmail(Long id, String email);
 
@@ -26,4 +27,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     Page<Order> findAllByStatus(OrderStatus status, Pageable pageable);
 
     Page<Order> findAllByStatusNot(OrderStatus status, Pageable pageable);
+
+    Page<Order> findAllByUserId(long userId, Pageable pageable);
+
 }
