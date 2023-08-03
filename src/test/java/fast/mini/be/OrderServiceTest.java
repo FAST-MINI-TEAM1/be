@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import fast.mini.be.domain.approveDate.ApproveDate;
+import fast.mini.be.domain.approveDate.ApproveDateRepository;
 import fast.mini.be.domain.order.Order;
 import fast.mini.be.domain.order.OrderRepository;
 import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
@@ -32,6 +34,9 @@ public class OrderServiceTest {
 
 	@Autowired
 	private OrderRepository orderRepository;
+
+	@Autowired
+	private ApproveDateRepository approveDateRepository;
 
 	@Transactional
 	@Test
@@ -94,7 +99,7 @@ public class OrderServiceTest {
 	@Test
 	public void orderList(){
 		// 테스트 데이터 생성
-		String userEmail = "mkellet5@canalblog.com";
+		String userEmail = "ebunce1@bravesites.com";
 		String token = jwtService.createAccessToken(userEmail);
 
 
@@ -112,15 +117,15 @@ public class OrderServiceTest {
 
 	@Test
 	public void deleteOrderTest(){
-		String userEmail = "mkellet5@canalblog.com";
+		String userEmail = "oleming0@typepad.com";
 		String token = jwtService.createAccessToken(userEmail);
 
-		Long id =9L;
+		Long id =4L;
 
 		// 서비스 메서드 호출
 		orderService.deleteOrderByUser(token, id);
 
-		// 주문 내역 리스트 출력해보면 9L order 내역 사라진거 확인 가능
+		// 주문 내역 리스트 출력해보면 해당 order 내역 사라진거 확인 가능
 		List<Order> orderList = orderRepository.findByUserEmail(userEmail);
 		for (Order order : orderList) {
 			System.out.println("주문 ID: " + order.getId());
