@@ -35,15 +35,7 @@ public class OrderController {
 	@GetMapping("/main")
 	public ResponseEntity<List<OrderResponse>> getUserMainPage(@Valid @RequestHeader("Authorization") String token,  @RequestParam int year, @RequestParam int month) throws Exception{
 
-		String jwtToken = token.replace("Bearer ", "");
-
-		Optional<String> userEmailOpt = jwtService.extractUsername(jwtToken);
-
-		if (userEmailOpt.isEmpty()) throw new Exception401("유효하지 않는 토큰 입니다.");
-
-		String userEmail = userEmailOpt.get();
-
-		List<OrderResponse> orders = orderService.getUserMainPage(userEmail, year, month);
+		List<OrderResponse> orders = orderService.getUserMainPage(token, year, month);
 
 		return ResponseEntity.ok(orders);
 	}
@@ -66,7 +58,7 @@ public class OrderController {
 		return ResponseEntity.ok(orderList);
 	}
 
-	@PostMapping("/order/delete/{id}")
+	@PostMapping("/order/delete")
 	public ResponseEntity<?> deleteOrderByUser(@Valid @RequestHeader("Authorization") String token, @RequestParam Long id)throws Exception {
 
 		if(id == null) throw new Exception400("id","유효하지 않는 id 입니다.");
