@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import fast.mini.be.domain.approveDate.ApproveDate;
+import fast.mini.be.domain.approveDate.ApproveDateRepository;
 import fast.mini.be.domain.order.Order;
 import fast.mini.be.domain.order.OrderRepository;
 import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
@@ -32,6 +34,9 @@ public class OrderServiceTest {
 
 	@Autowired
 	private OrderRepository orderRepository;
+
+	@Autowired
+	private ApproveDateRepository approveDateRepository;
 
 	@Transactional
 	@Test
@@ -67,6 +72,7 @@ public class OrderServiceTest {
 
 
 		// 테스트에 사용할 더미 토큰 생성
+		Long user_id = 9L;
 		String userEmail = "mkellet5@canalblog.com";
 		String token = jwtService.createAccessToken(userEmail);
 
@@ -84,7 +90,7 @@ public class OrderServiceTest {
 		orderService.addOrder(token, orderRequest);
 
 		// 주문이 정상적으로 추가되었는지 확인
-		List<Order> orders = orderRepository.findByUserEmail(userEmail);
+		List<Order> orders = orderRepository.findByUserId(user_id);
 		//기존에 있던 데이터가 5개라 6으로 지정함
 		assertEquals(6, orders.size(), "연차가 정상적으로 추가되지 않았습니다.");
 		Order order = orders.get(0);
@@ -94,7 +100,7 @@ public class OrderServiceTest {
 	@Test
 	public void orderList(){
 		// 테스트 데이터 생성
-		String userEmail = "mkellet5@canalblog.com";
+		String userEmail = "ebunce1@bravesites.com";
 		String token = jwtService.createAccessToken(userEmail);
 
 
@@ -112,16 +118,18 @@ public class OrderServiceTest {
 
 	@Test
 	public void deleteOrderTest(){
-		String userEmail = "mkellet5@canalblog.com";
+
+		Long user_id = 4L;
+		String userEmail = "oleming0@typepad.com";
 		String token = jwtService.createAccessToken(userEmail);
 
-		Long id =9L;
+		Long id =4L;
 
 		// 서비스 메서드 호출
 		orderService.deleteOrderByUser(token, id);
 
-		// 주문 내역 리스트 출력해보면 9L order 내역 사라진거 확인 가능
-		List<Order> orderList = orderRepository.findByUserEmail(userEmail);
+		// 주문 내역 리스트 출력해보면 해당 order 내역 사라진거 확인 가능
+		List<Order> orderList = orderRepository.findByUserId(user_id);
 		for (Order order : orderList) {
 			System.out.println("주문 ID: " + order.getId());
 			System.out.println("주문 유형: " + order.getOrderType());

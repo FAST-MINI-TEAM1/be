@@ -32,12 +32,17 @@ public class OrderService {
 
 	public List<OrderResponse> getUserMainPage(String token, int year, int month) {
 
-		String email = jwtService.extractUsername(token)
-			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
-
 		YearMonth yearMonth = YearMonth.of(year, month);
 
-		List<Order> orders = orderRepository.findByUserEmail(email);
+		String jwtToken = token.replace("Bearer ", "");
+
+		String email = jwtService.extractUsername(jwtToken)
+			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
+
+		List<Order> orders = orderRepository.findByUserId(user.getId());
 
 		List<OrderResponse> orderResponses = orders.stream()
 			.filter(order -> {
@@ -54,10 +59,12 @@ public class OrderService {
 
 	public void addOrder(String token, OrderRequest orderRequest) {
 
-		String userEmail = jwtService.extractUsername(token)
-			.orElseThrow(() -> new Exception401("유효하지 않은 토큰입니다."));
+		String jwtToken = token.replace("Bearer ", "");
 
-		User user = userRepository.findByEmail(userEmail)
+		String email = jwtService.extractUsername(jwtToken)
+			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+
+		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
 
 		int annualCount = user.getAnnualCount();
@@ -94,11 +101,16 @@ public class OrderService {
 
 	public Page<orderListByUserDto> getOrdersByUser(String token, Pageable pageable) {
 
-		String email = jwtService.extractUsername(token)
+		String jwtToken = token.replace("Bearer ", "");
+
+		String email = jwtService.extractUsername(jwtToken)
 			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
 
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
+
 		// 주문 목록을 페이징
-		Page<Order> userOrderList = orderRepository.findByUserEmail(email, pageable);
+		Page<Order> userOrderList = orderRepository.findByUserId(user.getId(), pageable);
 
 		// OrderListByUserDto로 변환하여 Page 객체로 반환
 		return orderListByUserDto.fromOrder(userOrderList);
@@ -106,7 +118,9 @@ public class OrderService {
 
 	public void deleteOrderByUser(String token, Long id) {
 
-		String email = jwtService.extractUsername(token)
+		String jwtToken = token.replace("Bearer ", "");
+
+		String email = jwtService.extractUsername(jwtToken)
 			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
 
 		User user = userRepository.findByEmail(email)
@@ -114,7 +128,7 @@ public class OrderService {
 
 		int annualCount = user.getAnnualCount();
 
-		Order order = orderRepository.findByIdAndUserEmail(id, email)
+		Order order = orderRepository.findById(id)
 			.orElseThrow(() -> new Exception404("주문 내역을 찾을 수 없습니다."));
 
 		// 주문 내역이 연차인 경우에만 연차 개수를 증가
