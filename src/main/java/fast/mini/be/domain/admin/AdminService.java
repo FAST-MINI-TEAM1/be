@@ -30,7 +30,7 @@ public class AdminService {
         Order orderPS = orderRepository.findById(orderUpdateDTO.getId())
                 .orElseThrow(() -> new Exception404("결재 요청을 찾을 수 없습니다."));
 
-        OrderStatus status = orderUpdateDTO.getStatus();
+        OrderStatus status = orderUpdateDTO.getOrderStatus();
         orderPS.statusUpdate(status);
 
         if (status == OrderStatus.APPROVE) {
