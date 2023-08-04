@@ -12,6 +12,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+
 public class AdminRequest {
     private static final AES256 AES256 = new AES256();
 
@@ -29,6 +30,7 @@ public class AdminRequest {
         public OrderUpdateDTO(Long id, String status) {
             this.id = id;
             this.orderStatus = OrderStatus.findByLabel(status);
+
         }
     }
 
