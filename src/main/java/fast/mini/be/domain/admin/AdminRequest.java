@@ -1,5 +1,6 @@
 package fast.mini.be.domain.admin;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fast.mini.be.domain.order.OrderStatus;
 import fast.mini.be.domain.order.OrderType;
 import fast.mini.be.global.erros.exception.Exception400;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 public class AdminRequest {
     private static final AES256 AES256 = new AES256();
@@ -16,15 +19,18 @@ public class AdminRequest {
     @Getter
     @Setter
     public static class OrderUpdateDTO {
-        @NotEmpty
+        @NotNull
         Long id;
 
-        @NotEmpty
-        OrderStatus status;
+        String status;
+
+        @JsonIgnore
+        OrderStatus orderStatus;
 
         public OrderUpdateDTO(Long id, String status) {
             this.id = id;
-            this.status = OrderStatus.findByLabel(status);
+            this.orderStatus = OrderStatus.findByLabel(status);
+
         }
     }
 

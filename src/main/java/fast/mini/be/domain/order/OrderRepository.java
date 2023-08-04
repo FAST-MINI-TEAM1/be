@@ -7,22 +7,22 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+public interface OrderRepository extends JpaRepository<Order,Long> {
+	List<Order> findByUserId(Long user_id);
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByUserEmail(String email);
+	Page<Order> findByUserId(Long user_id, Pageable pageable);
 
-    Page<Order> findByUserEmail(String email, Pageable pageable);
+	Optional<Order> findById(Long id);
 
-    Optional<Order> findByIdAndUserEmail(Long id, String email);
-
-    // 주어진 주문 ID에 해당하는 승인 날짜들을 삭제하는 쿼리
-    @Modifying
-    @Query("DELETE FROM ApproveDate ad WHERE ad.order.id = :orderId")
-    void deleteApproveDatesByOrderId(Long orderId);
-
+	// 주어진 주문 ID에 해당하는 승인 날짜들을 삭제하는 쿼리
+	@Modifying
+	@Query("DELETE FROM ApproveDate ad WHERE ad.order.id = :orderId")
+	void deleteApproveDatesByOrderId(Long orderId);
+  
     Page<Order> findAllByStatus(OrderStatus status, Pageable pageable);
 
     Page<Order> findAllByStatusNot(OrderStatus status, Pageable pageable);
