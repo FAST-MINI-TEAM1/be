@@ -1,6 +1,7 @@
 package fast.mini.be.domain.admin;
 
 import fast.mini.be.global.erros.exception.Exception400;
+import fast.mini.be.global.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public class AdminController {
             @Valid @RequestBody AdminRequest.OrderUpdateDTO orderUpdateDTO
     ) {
         adminService.orderUpdate(orderUpdateDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(null), HttpStatus.OK);
     }
 
     @GetMapping("/order/list/status/{status}")
@@ -37,7 +38,7 @@ public class AdminController {
         }
 
         Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
-        return new ResponseEntity<>(orderListByStatusDTO, HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(orderListByStatusDTO), HttpStatus.OK);
     }
 
     @GetMapping("/order/list/monthly/{orderType}")
@@ -48,7 +49,7 @@ public class AdminController {
     ) {
         AdminRequest.MonthlyUserTotalDTO requestDTO = new AdminRequest.MonthlyUserTotalDTO(orderType, year);
         List<AdminResponse.MonthlyUserTotalDTO> monthlyUserTotal = adminService.monthlyUserTotal(requestDTO);
-        return new ResponseEntity<>(monthlyUserTotal, HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(monthlyUserTotal), HttpStatus.OK);
     }
 
     @GetMapping("/order/list/daily/{orderType}")
@@ -60,7 +61,7 @@ public class AdminController {
     ) {
         AdminRequest.DailyOrderListDTO requestDTO = new AdminRequest.DailyOrderListDTO(orderType, year, month);
         List<AdminResponse.DailyOrderDTO> dailyOrderDTOList = adminService.dailyOrderList(requestDTO);
-        return new ResponseEntity<>(dailyOrderDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(dailyOrderDTOList), HttpStatus.OK);
     }
 
     @GetMapping("/user/search")

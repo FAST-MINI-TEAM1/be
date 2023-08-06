@@ -1,5 +1,6 @@
 package fast.mini.be.global.erros.exception;
 
+import fast.mini.be.global.utils.ApiUtils;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -12,16 +13,16 @@ public class Exception400 extends RuntimeException {
     private String value;
 
     public Exception400(String key, String value) {
-        super(key+" : "+value);
+        super(key + " : " + value);
         this.key = key;
         this.value = value;
     }
 
-    public String body(){
-        return getMessage();
+    public ApiUtils.ApiResult<?> body() {
+        return ApiUtils.error(getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    public HttpStatus status(){
+    public HttpStatus status() {
         return HttpStatus.BAD_REQUEST;
     }
 }
