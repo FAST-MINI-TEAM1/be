@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class OrderRequest {
 
-	private OrderType orderType;
+	private String orderType;
 	private String startAt;
 	private String endAt;
 	private String reason;

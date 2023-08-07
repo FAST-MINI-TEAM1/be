@@ -4,6 +4,8 @@ package fast.mini.be.domain.order;
 
 import org.springframework.data.domain.Page;
 
+import fast.mini.be.global.erros.exception.Exception500;
+import fast.mini.be.global.utils.AES256;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +20,8 @@ public class OrderResponse {
 	private String startDate;
 	private String endDate;
 	private String status;
+
+	private static final fast.mini.be.global.utils.AES256 AES256 = new AES256();
 
 	public static OrderResponse fromOrder(Order order) {
 		return new OrderResponse(
@@ -43,7 +47,11 @@ public class OrderResponse {
 
 		private orderListByUserDto(Order order){
 			this.id = order.getId();
-			this.empName = order.getUser().getEmpName();
+			try {
+				this.empName = AES256.decrypt(order.getUser().getEmpName());
+			} catch (Exception e) {
+				throw new Exception500("서버 오류!");
+			}
 			this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
 			this.orderType = order.getOrderType().getLabel();
 			this.status = order.getStatus().getLabel();
