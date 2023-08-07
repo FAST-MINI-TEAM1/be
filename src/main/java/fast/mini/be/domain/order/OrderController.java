@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import fast.mini.be.domain.order.OrderResponse.orderListByUserDto;
+import fast.mini.be.global.utils.ApiUtils.ApiResult;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fast.mini.be.global.erros.exception.Exception400;
 import fast.mini.be.global.erros.exception.Exception401;
 import fast.mini.be.global.jwt.service.JwtService;
+import fast.mini.be.global.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,38 +35,38 @@ public class OrderController {
 	private final JwtService jwtService;
 
 	@GetMapping("/main")
-	public ResponseEntity<List<OrderResponse>> getUserMainPage(@Valid @RequestHeader("Authorization") String token,  @RequestParam int year, @RequestParam int month) throws Exception{
+	public ResponseEntity<ApiResult<List<OrderResponse>>> getUserMainPage(@Valid @RequestHeader("Authorization") String token,  @RequestParam int year, @RequestParam int month) throws Exception{
 
 		List<OrderResponse> orders = orderService.getUserMainPage(token, year, month);
 
-		return ResponseEntity.ok(orders);
+		return ResponseEntity.ok(ApiUtils.success(orders));
 	}
 
 	@PostMapping("/order/add")
-	public ResponseEntity<String> addOrder(@Valid @RequestHeader("Authorization") String token,
+	public ResponseEntity<ApiResult<String>> addOrder(@Valid @RequestHeader("Authorization") String token,
 		@RequestBody OrderRequest orderRequest) throws Exception{
 
 		orderService.addOrder(token, orderRequest);
 
-		return new ResponseEntity<>(HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success("등록 완료"));
 	}
 
 	@GetMapping("/myorder")
-	public ResponseEntity<Page<orderListByUserDto>> getOrdersByUser(@Valid @RequestHeader("Authorization") String token,
+	public ResponseEntity<ApiResult<Page<orderListByUserDto>>> getOrdersByUser(@Valid @RequestHeader("Authorization") String token,
 		Pageable pageable)throws Exception{
 
 		Page<OrderResponse.orderListByUserDto> orderList = orderService.getOrdersByUser(token, pageable);
 
-		return ResponseEntity.ok(orderList);
+		return ResponseEntity.ok(ApiUtils.success(orderList));
 	}
 
 	@PostMapping("/order/delete")
-	public ResponseEntity<?> deleteOrderByUser(@Valid @RequestHeader("Authorization") String token, @RequestParam Long id)throws Exception {
+	public ResponseEntity<ApiResult<String>> deleteOrderByUser(@Valid @RequestHeader("Authorization") String token, @RequestParam Long id)throws Exception {
 
 		if(id == null) throw new Exception400("id","유효하지 않는 id 입니다.");
 
 		orderService.deleteOrderByUser(token, id);
 
-		return ResponseEntity.ok().build(); // 삭제 성공 시 200 OK 응답 반환
+		return ResponseEntity.ok(ApiUtils.success("삭제 완료")); // 삭제 성공 시 200 OK 응답 반환
 	}
 }
