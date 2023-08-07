@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import fast.mini.be.global.erros.exception.Exception401;
 import fast.mini.be.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin(origins = "http://54.79.60.180:8080",allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
