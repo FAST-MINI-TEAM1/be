@@ -7,11 +7,13 @@ import fast.mini.be.global.utils.dto.CommonResult;
 import fast.mini.be.global.utils.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "http://54.79.60.180:8080",allowedHeaders = "*")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
