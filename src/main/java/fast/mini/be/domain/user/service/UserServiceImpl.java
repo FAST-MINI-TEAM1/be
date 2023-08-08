@@ -4,6 +4,7 @@ import fast.mini.be.domain.user.Role;
 import fast.mini.be.domain.user.User;
 import fast.mini.be.domain.user.dto.UserRegisterDto;
 import fast.mini.be.domain.user.repository.UserRepository;
+import fast.mini.be.global.utils.AES256;
 import fast.mini.be.global.utils.exception.BaseException;
 import fast.mini.be.global.utils.exception.ExMessage;
 import java.util.Calendar;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AES256 aes256;
 
 
     @Transactional
@@ -46,7 +48,7 @@ public class UserServiceImpl implements UserService {
                 User user = User.builder()
                     .email(email)
                     .password(passwordEncoder.encode(password))
-                    .empName(empName)
+                    .empName(aes256.encrypt(empName))
                     .position(position)
                     .role(Role.USER)
                     .annualCount(12)
