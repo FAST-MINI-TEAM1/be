@@ -14,8 +14,6 @@ import fast.mini.be.global.erros.exception.Exception401;
 import fast.mini.be.global.erros.exception.Exception403;
 import fast.mini.be.global.jwt2.JwtTokenProvider;
 import fast.mini.be.global.utils.AES256;
-import fast.mini.be.global.utils.exception.BaseException;
-import fast.mini.be.global.utils.exception.ExMessage;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
