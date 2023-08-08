@@ -45,14 +45,12 @@ public class UserServiceImpl implements UserService {
         UserRegisterResponseDto responseDto = new UserRegisterResponseDto();
 
         if (email == null || password == null || empName == null
-        || email.length() == 0 || password.length() == 0 || empName.length() == 0) {
+            || email.length() == 0 || password.length() == 0 || empName.length() == 0) {
             throw new Exception403("회원정보가 제대로 입력되지 않았습니다.");
-        }
-        else if (userRepository.findByEmail(email).isPresent()) {
+        } else if (userRepository.findByEmail(email).isPresent()) {
             throw new Exception403("이메일이 중복되었습니다.");
         } else {
             try {
-
 
                 User user = userRepository.save(User.builder()
                     .email(email)
@@ -101,9 +99,19 @@ public class UserServiceImpl implements UserService {
             .refreshToken(refreshToken)
             .build();
 
-
-
         log.info("로그인 서비스단 종료");
         return responseDto;
     }
+
+    @Override
+    public Boolean emailExists(String email) {
+        if (email == null || email.length() == 0) {
+            throw new Exception403("이메일을 정확히 입력해주세요.");
+        } else if (userRepository.findByEmail(email).isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

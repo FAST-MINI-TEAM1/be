@@ -10,4 +10,6 @@ public interface UserService {
 
     UserLoginResponseDto login2(UserLoginRequestDto requestDto) throws Exception;
 
+    Boolean emailExists(String email);
+
 }
