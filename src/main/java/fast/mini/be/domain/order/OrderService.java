@@ -69,7 +69,10 @@ public class OrderService {
 
 		int annualCount = user.getAnnualCount();
 
-		if (orderRequest.getOrderType() == OrderType.ANNUAL) {
+		String orderTypeLabel=orderRequest.getOrderType();
+		OrderType orderType =OrderType.findByLabel(orderTypeLabel);
+
+		if (orderType == OrderType.ANNUAL) {
 			if (annualCount <= 0) {
 				throw new Exception403("사용 가능한 연차가 부족합니다.");
 			}
@@ -87,7 +90,7 @@ public class OrderService {
 
 		Order order = Order.builder()
 			.user(user)
-			.orderType(orderRequest.getOrderType())
+			.orderType(orderType)
 			.startDate(startDate)
 			.endDate(endDate)
 			.reason(orderRequest.getReason())
