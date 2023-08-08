@@ -7,17 +7,22 @@ import fast.mini.be.domain.user.dto.UserRegisterResponseDto;
 import fast.mini.be.domain.user.service.UserService;
 import fast.mini.be.global.erros.exception.Exception400;
 import fast.mini.be.global.erros.exception.Exception403;
+import fast.mini.be.global.jwt2.JwtTokenProvider;
 import fast.mini.be.global.utils.ApiUtils;
 import fast.mini.be.global.utils.dto.CommonResult;
 import fast.mini.be.global.utils.service.ResponseService;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegisterRequestDto requestDto)
@@ -38,9 +44,9 @@ public class UserController {
 
 
     @PostMapping("/login2")
-    public ResponseEntity<?> login2(@RequestBody UserLoginRequestDto requestDto)
+    public ResponseEntity<?> login2(@RequestBody UserLoginRequestDto requestDto, HttpServletRequest request)
         throws Exception {
-        UserLoginResponseDto responseDto = userService.login2(requestDto);
+        UserLoginResponseDto responseDto = userService.login2(request, requestDto);
         return new ResponseEntity<>(ApiUtils.success(responseDto), HttpStatus.OK);
     }
 
@@ -52,7 +58,9 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    public String hello() {
-        return "Hello";
+    public String hello(@RequestHeader("Authorization") String token) {
+        String email = jwtTokenProvider.getMemberEmail(token);
+        System.out.println(email);
+        return email;
     }
 }

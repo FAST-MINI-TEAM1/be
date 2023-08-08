@@ -1,5 +1,7 @@
 package fast.mini.be.domain.user.service;
 
+import fast.mini.be.domain.loginlog.LogRepository;
+import fast.mini.be.domain.loginlog.LoginLog;
 import fast.mini.be.domain.user.Role;
 import fast.mini.be.domain.user.User;
 import fast.mini.be.domain.user.dto.UserLoginRequestDto;
@@ -15,8 +17,10 @@ import fast.mini.be.global.utils.AES256;
 import fast.mini.be.global.utils.exception.BaseException;
 import fast.mini.be.global.utils.exception.ExMessage;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.id.uuid.Helper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final LogRepository logRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AES256 aes256;
@@ -71,7 +76,7 @@ public class UserServiceImpl implements UserService {
         return responseDto;
     }
 
-    public UserLoginResponseDto login2(UserLoginRequestDto requestDto) throws Exception {
+    public UserLoginResponseDto login2(HttpServletRequest request, UserLoginRequestDto requestDto) throws Exception {
         log.info("로그인 시도 중");
         log.info("이메일 중복확인");
         if (!userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
@@ -98,6 +103,12 @@ public class UserServiceImpl implements UserService {
             .accessToken(accessToken)
             .refreshToken(refreshToken)
             .build();
+
+        logRepository.save(LoginLog.builder()
+                .user(user.get())
+                .userAgent(request.getHeader("user-agent"))
+                .clientIP(request.getRemoteAddr())
+            .build());
 
         log.info("로그인 서비스단 종료");
         return responseDto;
