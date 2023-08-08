@@ -5,6 +5,8 @@ import fast.mini.be.domain.user.repository.UserRepository;
 import fast.mini.be.domain.user.service.LoginService;
 import fast.mini.be.global.jwt.filter.JwtAuthenticationProcessingFilter;
 import fast.mini.be.global.jwt.service.JwtService;
+import fast.mini.be.global.jwt2.JwtAuthenticationFilter;
+import fast.mini.be.global.jwt2.JwtTokenProvider;
 import fast.mini.be.global.login.filter.JsonEmailPasswordAuthenticationFilter;
 import fast.mini.be.global.login.handler.LoginFailureHandler;
 import fast.mini.be.global.login.handler.LoginSuccessJWTProvideHandler;
@@ -19,6 +21,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -32,27 +35,34 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http, Jwt jwt, TokenService tokenService) throws
     public SecurityFilterChain filterChain(HttpSecurity http) throws
             Exception {
         http
-                .formLogin().disable()//1 - formLogin 인증방법 비활성화
-                .httpBasic().disable()//2 - httpBasic 인증방법 비활성화(특정 리소스에 접근할 때 username과 password 물어봄)
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .formLogin().disable()//1 - formLogin 인증방법 비활성화
+            .httpBasic().disable()//2 - httpBasic 인증방법 비활성화(특정 리소스에 접근할 때 username과 password 물어봄)
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/login", "/api/register").permitAll()
-                .antMatchers("/api/user/**")
-                .access("hasRole('ADMIN') or hasRole('USER')")
-                .antMatchers("/api/admin/**")
-                .access("hasRole('ADMIN')")
-                .anyRequest().authenticated()
-                .and()
-                .cors().configurationSource(configurationSource());
+            .and()
+            .authorizeRequests()
+            .antMatchers("/api/login", "/api/register", "/api/login2").permitAll()
+            .antMatchers("/api/user/**")
+            .access("hasRole('ADMIN') or hasRole('USER')")
+            .antMatchers("/api/admin/**")
+            .access("hasRole('ADMIN')")
+            .antMatchers("/hello")
+            .access("hasRole('USER')")
+            .anyRequest().authenticated()
+            .and()
+            .cors().configurationSource(configurationSource())
+            .and()
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter.class)
+        ;
 
         http.addFilterAfter(jsonEmailPasswordLoginFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(),
