@@ -7,12 +7,14 @@ import fast.mini.be.global.erros.exception.Exception500;
 import fast.mini.be.global.utils.AES256;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 
 import java.time.Month;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class AdminResponse {
     private static final AES256 AES256 = new AES256();
 
@@ -120,6 +122,8 @@ public class AdminResponse {
             try {
                 this.empName = AES256.decrypt(user.getEmpName());
             } catch (Exception e) {
+                log.error(e.getMessage());
+                e.printStackTrace();
                 throw new Exception500("서버 오류!");
             }
             this.empNo = Long.valueOf(user.getEmpNo());
