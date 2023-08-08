@@ -14,7 +14,7 @@ import java.util.Base64;
 @Component
 public class AES256 {
     public static String alg = "AES/CBC/PKCS5Padding";
-    private final String key = "12345678910111213";
+    private final String key = "01234567890123456789012345678901";
     private final String iv = key.substring(0, 16); // 16byte
 
     public String encrypt(String text) {
