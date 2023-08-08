@@ -13,12 +13,15 @@ import fast.mini.be.global.erros.exception.Exception400;
 import fast.mini.be.global.erros.exception.Exception401;
 import fast.mini.be.global.erros.exception.Exception403;
 import fast.mini.be.global.jwt2.JwtTokenProvider;
+import fast.mini.be.global.jwt2.TokenDto;
 import fast.mini.be.global.utils.AES256;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.id.uuid.Helper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +77,8 @@ public class UserServiceImpl implements UserService {
         return responseDto;
     }
 
-    public UserLoginResponseDto login2(HttpServletRequest request, UserLoginRequestDto requestDto) throws Exception {
+    public UserLoginResponseDto login2(HttpServletRequest request, UserLoginRequestDto requestDto)
+        throws Exception {
         log.info("로그인 시도 중");
         log.info("이메일 중복확인");
         if (!userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
@@ -103,9 +107,9 @@ public class UserServiceImpl implements UserService {
             .build();
 
         logRepository.save(LoginLog.builder()
-                .user(user.get())
-                .userAgent(request.getHeader("user-agent"))
-                .clientIP(request.getRemoteAddr())
+            .user(user.get())
+            .userAgent(request.getHeader("user-agent"))
+            .clientIP(request.getRemoteAddr())
             .build());
 
         log.info("로그인 서비스단 종료");
@@ -121,6 +125,36 @@ public class UserServiceImpl implements UserService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public TokenDto reIssue(TokenDto requestDto) {
+        log.info("refreshToken 유효기간 체크");
+        if (!jwtTokenProvider.validateTokenExceptExpiration(requestDto.getRefreshToken())) {
+            throw new Exception401("refreshToken 유효하지 않음");
+        }
+
+        log.info("userInfo 불러오기");
+        User user = findUserByToken(requestDto);
+
+        log.info("refreshToken 일치 확인");
+        if (!user.getRefreshToken().equals(requestDto.getRefreshToken())) {
+            throw new Exception401("refreshToken 유효하지 않음");
+        }
+
+        String accessToken = jwtTokenProvider.createToken(user.getEmail());
+        String refreshToken = jwtTokenProvider.createRefreshToken();
+        user.updateRefreshToken(refreshToken);
+        log.info("재발급 서비스단 종료");
+        return new TokenDto(accessToken, refreshToken);
+    }
+
+    @Override
+    public User findUserByToken(TokenDto requestDto) {
+        Authentication auth = jwtTokenProvider.getAuthentication(requestDto.getAccessToken());
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        String username = userDetails.getUsername();
+        return userRepository.findByEmail(username).orElseThrow(() -> new Exception401("유저가 존재하지 않음"));
     }
 
 }

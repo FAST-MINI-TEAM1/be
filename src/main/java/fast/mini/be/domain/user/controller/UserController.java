@@ -8,6 +8,7 @@ import fast.mini.be.domain.user.service.UserService;
 import fast.mini.be.global.erros.exception.Exception400;
 import fast.mini.be.global.erros.exception.Exception403;
 import fast.mini.be.global.jwt2.JwtTokenProvider;
+import fast.mini.be.global.jwt2.TokenDto;
 import fast.mini.be.global.utils.ApiUtils;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,12 @@ public class UserController {
         String email = emailMap.get("email");
         userService.emailExists(email);
         return new ResponseEntity<>(ApiUtils.success("사용이 가능한 이메일입니다."), HttpStatus.OK);
+    }
+
+    @GetMapping("/login2/reissue")
+    public ResponseEntity<?> reIssue(@RequestBody TokenDto requestDto) {
+        TokenDto responseDto = userService.reIssue(requestDto);
+        return new ResponseEntity<>(ApiUtils.success(responseDto), HttpStatus.OK);
     }
 
     @GetMapping("/hello")
