@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
         if (email == null || email.length() == 0) {
             throw new Exception403("이메일을 정확히 입력해주세요.");
         } else if (userRepository.findByEmail(email).isPresent()) {
-            return true;
+            throw new Exception403("이미 사용중인 이메일 입니다.");
         } else {
             return false;
         }

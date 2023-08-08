@@ -10,6 +10,7 @@ import fast.mini.be.global.erros.exception.Exception403;
 import fast.mini.be.global.utils.ApiUtils;
 import fast.mini.be.global.utils.dto.CommonResult;
 import fast.mini.be.global.utils.service.ResponseService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,14 +44,11 @@ public class UserController {
         return new ResponseEntity<>(ApiUtils.success(responseDto), HttpStatus.OK);
     }
 
-    @PostMapping("/register/emailExists")
-    public ResponseEntity<?> emailExists(@RequestBody String email) {
-        Boolean res = userService.emailExists(email);
-        if (res) {
-            throw new Exception403("이미 사용중인 이메일 입니다.");
-        } else {
-            return new ResponseEntity<>(ApiUtils.success("사용가능한 이메일 입니다."), HttpStatus.OK);
-        }
+    @GetMapping ("/register/emailExists")
+    public ResponseEntity<?> emailExists(@RequestBody Map<String, String> emailMap) {
+        String email = emailMap.get("email");
+        userService.emailExists(email);
+        return new ResponseEntity<>(ApiUtils.success("사용이 가능한 이메일입니다."), HttpStatus.OK);
     }
 
     @GetMapping("/hello")

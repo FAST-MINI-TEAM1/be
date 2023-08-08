@@ -49,7 +49,7 @@ public class SecurityConfig {
 
             .and()
             .authorizeRequests()
-            .antMatchers("/api/login", "/api/register", "/api/login2").permitAll()
+            .antMatchers("/api/login", "/api/register/**", "/api/login2").permitAll()
             .antMatchers("/api/user/**")
             .access("hasRole('ADMIN') or hasRole('USER')")
             .antMatchers("/api/admin/**")
