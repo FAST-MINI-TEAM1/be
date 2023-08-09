@@ -33,11 +33,7 @@ public class AdminResponse {
 
         private OrderByStatusDTO(Order order) {
             this.id = order.getId();
-            try {
-                this.empName = AES256.decrypt(order.getUser().getEmpName());
-            } catch (Exception e) {
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(order.getUser().getEmpName());
             this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
             this.orderType = order.getOrderType().getLabel();
             this.status = order.getStatus().getLabel();
@@ -119,13 +115,7 @@ public class AdminResponse {
 
         public MonthlyUserTotalDTO(User user, MonthCountDTO monthCountDTO) {
             this.id = user.getId();
-            try {
-                this.empName = AES256.decrypt(user.getEmpName());
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                e.printStackTrace();
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(user.getEmpName());
             this.empNo = Long.valueOf(user.getEmpNo());
             this.month = monthCountDTO;
             this.total = monthCountDTO.getTotalCount();
@@ -140,11 +130,7 @@ public class AdminResponse {
         String date;
 
         private DailyOrderDTO(ApproveDate approveDate) {
-            try {
-                this.empName = AES256.decrypt(approveDate.getUser().getEmpName());
-            } catch (Exception e) {
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(approveDate.getUser().getEmpName());
             this.empNo = Long.valueOf(approveDate.getUser().getEmpNo());
             this.orderType = approveDate.getOrder().getOrderType().getLabel();
             this.date = DateUtils.toStringFormat(approveDate.getDate());
@@ -189,11 +175,7 @@ public class AdminResponse {
 
         private OrderByUserIdDTO(Order order) {
             this.id = order.getId();
-            try {
-                this.empName = AES256.decrypt(order.getUser().getEmpName());
-            } catch (Exception e) {
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(order.getUser().getEmpName());
             this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
             this.orderType = order.getOrderType().getLabel();
             this.status = order.getStatus().getLabel();
