@@ -6,7 +6,7 @@ import fast.mini.be.domain.user.repository.UserRepository;
 import fast.mini.be.global.erros.exception.Exception401;
 import fast.mini.be.global.erros.exception.Exception403;
 import fast.mini.be.global.erros.exception.Exception404;
-import fast.mini.be.global.jwt.service.JwtService;
+import fast.mini.be.global.jwt2.JwtTokenProvider;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -28,16 +28,15 @@ public class OrderService {
 
 	private final OrderRepository orderRepository;
 	private final UserRepository userRepository;
-	private final JwtService jwtService;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	public List<OrderResponse> getUserMainPage(String token, int year, int month) {
 
 		YearMonth yearMonth = YearMonth.of(year, month);
 
-		String jwtToken = token.replace("Bearer ", "");
+//		String jwtToken = token.replace("Bearer ", "");
 
-		String email = jwtService.extractUsername(jwtToken)
-			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+		String email = jwtTokenProvider.getMemberEmail(token);
 
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
@@ -59,10 +58,10 @@ public class OrderService {
 
 	public void addOrder(String token, OrderRequest orderRequest) {
 
-		String jwtToken = token.replace("Bearer ", "");
+//		String jwtToken = token.replace("Bearer ", "");
 
-		String email = jwtService.extractUsername(jwtToken)
-			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+		String email = jwtTokenProvider.getMemberEmail(token);
+//			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
 
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
@@ -104,10 +103,10 @@ public class OrderService {
 
 	public Page<orderListByUserDto> getOrdersByUser(String token, Pageable pageable) {
 
-		String jwtToken = token.replace("Bearer ", "");
+//		String jwtToken = token.replace("Bearer ", "");
 
-		String email = jwtService.extractUsername(jwtToken)
-			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+		String email = jwtTokenProvider.getMemberEmail(token);
+//			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
 
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
@@ -121,10 +120,10 @@ public class OrderService {
 
 	public void deleteOrderByUser(String token, Long id) {
 
-		String jwtToken = token.replace("Bearer ", "");
+//		String jwtToken = token.replace("Bearer ", "");
 
-		String email = jwtService.extractUsername(jwtToken)
-			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
+		String email = jwtTokenProvider.getMemberEmail(token);
+//			.orElseThrow(() -> new Exception401("유효하지 않는 토큰입니다."));
 
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
