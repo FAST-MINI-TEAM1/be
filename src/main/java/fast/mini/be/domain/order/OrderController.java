@@ -1,5 +1,6 @@
 package fast.mini.be.domain.order;
 
+import fast.mini.be.global.jwt2.JwtTokenProvider;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fast.mini.be.global.erros.exception.Exception400;
 import fast.mini.be.global.erros.exception.Exception401;
-import fast.mini.be.global.jwt.service.JwtService;
 import fast.mini.be.global.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 
 	private final OrderService orderService;
-	private final JwtService jwtService;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	@GetMapping("/main")
 	public ResponseEntity<ApiResult<List<OrderResponse>>> getUserMainPage(@Valid @RequestHeader("Authorization") String token,  @RequestParam int year, @RequestParam int month) throws Exception{
