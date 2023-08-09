@@ -42,10 +42,10 @@ public class UserController {
     }
 
 
-    @PostMapping("/login2")
-    public ResponseEntity<?> login2(@RequestBody UserLoginRequestDto requestDto, HttpServletRequest request)
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginRequestDto requestDto, HttpServletRequest request)
         throws Exception {
-        UserLoginResponseDto responseDto = userService.login2(request, requestDto);
+        UserLoginResponseDto responseDto = userService.login(request, requestDto);
         return new ResponseEntity<>(ApiUtils.success(responseDto), HttpStatus.OK);
     }
 
@@ -56,7 +56,7 @@ public class UserController {
         return new ResponseEntity<>(ApiUtils.success("사용이 가능한 이메일입니다."), HttpStatus.OK);
     }
 
-    @GetMapping("/login2/reissue")
+    @GetMapping("/login/reissue")
     public ResponseEntity<?> reIssue(@RequestBody TokenDto requestDto) {
         TokenDto responseDto = userService.reIssue(requestDto);
         return new ResponseEntity<>(ApiUtils.success(responseDto), HttpStatus.OK);

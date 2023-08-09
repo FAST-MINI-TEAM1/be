@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         return responseDto;
     }
 
-    public UserLoginResponseDto login2(HttpServletRequest request, UserLoginRequestDto requestDto)
+    public UserLoginResponseDto login(HttpServletRequest request, UserLoginRequestDto requestDto)
         throws Exception {
         log.info("로그인 시도 중");
         log.info("이메일 중복확인");

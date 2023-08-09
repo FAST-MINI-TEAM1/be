@@ -12,7 +12,7 @@ public interface UserService {
 
     UserRegisterResponseDto register(UserRegisterRequestDto requestDto) throws Exception;
 
-    UserLoginResponseDto login2(HttpServletRequest request, UserLoginRequestDto requestDto)
+    UserLoginResponseDto login(HttpServletRequest request, UserLoginRequestDto requestDto)
         throws Exception;
 
     Boolean emailExists(String email);
