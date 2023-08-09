@@ -41,7 +41,7 @@ public class SecurityConfig {
             .access("hasRole('ADMIN') or hasRole('USER')")
             .antMatchers("/api/admin/**")
             .access("hasRole('ADMIN')")
-            .antMatchers("/hello")
+            .antMatchers("/api/hello")
             .access("hasRole('USER')")
             .anyRequest().authenticated()
             .and()
@@ -56,7 +56,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
