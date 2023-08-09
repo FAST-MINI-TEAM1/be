@@ -1,7 +1,9 @@
 package fast.mini.be.domain.admin;
 
 import fast.mini.be.global.erros.exception.Exception400;
+import fast.mini.be.global.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin")
@@ -23,7 +26,7 @@ public class AdminController {
             @Valid @RequestBody AdminRequest.OrderUpdateDTO orderUpdateDTO
     ) {
         adminService.orderUpdate(orderUpdateDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(null), HttpStatus.OK);
     }
 
     @GetMapping("/order/list/status/{status}")
@@ -37,7 +40,7 @@ public class AdminController {
         }
 
         Page<AdminResponse.OrderByStatusDTO> orderListByStatusDTO = adminService.orderListByStatus(status, pageable);
-        return new ResponseEntity<>(orderListByStatusDTO, HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(orderListByStatusDTO), HttpStatus.OK);
     }
 
     @GetMapping("/order/list/monthly/{orderType}")
@@ -46,9 +49,10 @@ public class AdminController {
             @PathVariable("orderType") String orderType,
             @RequestParam(value = "year") int year
     ) {
+        log.info("월별 리스트 조회: type=" + orderType + "year=" + year);
         AdminRequest.MonthlyUserTotalDTO requestDTO = new AdminRequest.MonthlyUserTotalDTO(orderType, year);
         List<AdminResponse.MonthlyUserTotalDTO> monthlyUserTotal = adminService.monthlyUserTotal(requestDTO);
-        return new ResponseEntity<>(monthlyUserTotal, HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(monthlyUserTotal), HttpStatus.OK);
     }
 
     @GetMapping("/order/list/daily/{orderType}")
@@ -60,7 +64,7 @@ public class AdminController {
     ) {
         AdminRequest.DailyOrderListDTO requestDTO = new AdminRequest.DailyOrderListDTO(orderType, year, month);
         List<AdminResponse.DailyOrderDTO> dailyOrderDTOList = adminService.dailyOrderList(requestDTO);
-        return new ResponseEntity<>(dailyOrderDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(ApiUtils.success(dailyOrderDTOList), HttpStatus.OK);
     }
 
     @GetMapping("/user/search")
@@ -69,6 +73,7 @@ public class AdminController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "empno", required = false) String empNo
     ) {
+        log.info("월별 리스트 조회: name=" + name + "empno=" + empNo);
         if ((name != null && empNo != null) || (name == null && empNo == null)) {
             throw new Exception400("url", "잘못된 입력입니다.");
         }

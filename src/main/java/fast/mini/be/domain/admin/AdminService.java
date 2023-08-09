@@ -32,6 +32,7 @@ public class AdminService {
 
         OrderStatus status = orderUpdateDTO.getOrderStatus();
         orderPS.statusUpdate(status);
+        orderRepository.save(orderPS);
 
         if (status == OrderStatus.APPROVE) {
             List<LocalDateTime> dateList = orderPS.getDateList();

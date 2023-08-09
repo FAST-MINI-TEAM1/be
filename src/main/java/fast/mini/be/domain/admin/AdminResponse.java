@@ -7,12 +7,14 @@ import fast.mini.be.global.erros.exception.Exception500;
 import fast.mini.be.global.utils.AES256;
 import fast.mini.be.global.utils.DateUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 
 import java.time.Month;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class AdminResponse {
     private static final AES256 AES256 = new AES256();
 
@@ -31,11 +33,7 @@ public class AdminResponse {
 
         private OrderByStatusDTO(Order order) {
             this.id = order.getId();
-            try {
-                this.empName = AES256.decrypt(order.getUser().getEmpName());
-            } catch (Exception e) {
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(order.getUser().getEmpName());
             this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
             this.orderType = order.getOrderType().getLabel();
             this.status = order.getStatus().getLabel();
@@ -117,11 +115,7 @@ public class AdminResponse {
 
         public MonthlyUserTotalDTO(User user, MonthCountDTO monthCountDTO) {
             this.id = user.getId();
-            try {
-                this.empName = AES256.decrypt(user.getEmpName());
-            } catch (Exception e) {
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(user.getEmpName());
             this.empNo = Long.valueOf(user.getEmpNo());
             this.month = monthCountDTO;
             this.total = monthCountDTO.getTotalCount();
@@ -136,11 +130,7 @@ public class AdminResponse {
         String date;
 
         private DailyOrderDTO(ApproveDate approveDate) {
-            try {
-                this.empName = AES256.decrypt(approveDate.getUser().getEmpName());
-            } catch (Exception e) {
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(approveDate.getUser().getEmpName());
             this.empNo = Long.valueOf(approveDate.getUser().getEmpNo());
             this.orderType = approveDate.getOrder().getOrderType().getLabel();
             this.date = DateUtils.toStringFormat(approveDate.getDate());
@@ -185,11 +175,7 @@ public class AdminResponse {
 
         private OrderByUserIdDTO(Order order) {
             this.id = order.getId();
-            try {
-                this.empName = AES256.decrypt(order.getUser().getEmpName());
-            } catch (Exception e) {
-                throw new Exception500("서버 오류!");
-            }
+            this.empName = AES256.decrypt(order.getUser().getEmpName());
             this.createdAt = DateUtils.toStringFormat(order.getCreatedAt());
             this.orderType = order.getOrderType().getLabel();
             this.status = order.getStatus().getLabel();
