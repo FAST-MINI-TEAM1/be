@@ -13,7 +13,7 @@ public class OrderRequest {
 	private String startAt;
 	private String endAt;
 	private String reason;
-	private String category;
+	private Category category;
 	private String etc;
 
 }
