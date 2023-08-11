@@ -86,7 +86,6 @@ public class OrderService {
 		LocalDateTime startDate = LocalDateTime.parse(orderRequest.getStartAt() + "T00:00:00");
 		LocalDateTime endDate = LocalDateTime.parse(orderRequest.getEndAt() + "T00:00:00");
 
-		Category category = orderRequest.getCategory();
 
 		Order order = Order.builder()
 			.user(user)
@@ -94,7 +93,7 @@ public class OrderService {
 			.startDate(startDate)
 			.endDate(endDate)
 			.reason(orderRequest.getReason())
-			.category(String.valueOf(category))
+			.category(orderRequest.getCategory())
 			.etc(orderRequest.getEtc())
 			.status(OrderStatus.WAIT)
 			.build();
