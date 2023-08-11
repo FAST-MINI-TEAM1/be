@@ -20,6 +20,9 @@ public class OrderResponse {
 	private String startDate;
 	private String endDate;
 	private String status;
+	private String reason;
+	private String category;
+	private String etc;
 
 	private static final fast.mini.be.global.utils.AES256 AES256 = new AES256();
 
@@ -29,7 +32,10 @@ public class OrderResponse {
 			order.getOrderType().getLabel(),
 			DateUtils.toStringFormat(order.getStartDate()),
 			DateUtils.toStringFormat(order.getEndDate()),
-			order.getStatus().getLabel()
+			order.getStatus().getLabel(),
+			order.getReason(),
+			order.getCategory(),
+			order.getEtc()
 		);
 	}
 
@@ -44,6 +50,8 @@ public class OrderResponse {
 		String startDate;
 		String endDate;
 		String reason;
+		String category;
+		String etc;
 
 		private orderListByUserDto(Order order){
 			this.id = order.getId();
@@ -58,6 +66,8 @@ public class OrderResponse {
 			this.startDate = DateUtils.toStringFormat(order.getStartDate());
 			this.endDate = DateUtils.toStringFormat(order.getEndDate());
 			this.reason = order.getReason();
+			this.category = order.getCategory();
+			this.etc = order.getEtc();
 		}
 		public static Page<orderListByUserDto> fromOrder(Page<Order> userOrderList) {
 
