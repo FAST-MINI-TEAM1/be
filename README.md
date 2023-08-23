@@ -26,6 +26,21 @@
         <sub><b>윤현진</b><br></sub>
       </a>
   </tr>
+  <tr>
+    <td align="center">
+        <sub><b>- 백엔드 팀장</b><br></sub>
+        <sub><b>- aws배포 담당</b><br></sub>
+        <sub><b>- security, jws, 로그인, 회원가입 담당</b><br></sub>
+        <sub><b>- README 및 프로젝트 관련 서류 담당</b><br></sub>
+    </td>
+    <td align="center">
+        <sub><b>- DB erd 작성</b><br></sub>
+        <sub><b>- /api/admin 도매인 담당</b><br></sub>
+    </td>
+    <td align="center">
+        <sub><b>- /api/user 도매인 담당</b><br></sub>
+    </td>
+  </tr>
 </table>
 
 ## ✨기능 파악
